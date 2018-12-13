@@ -21,16 +21,19 @@ const menacing = client.emojis.find(emoji => emoji.name === "menacing"); //TODO 
 
 client.on("message", (message) => {
 
+    // make certain the bot doesn't fall into a loop with another bot.
     if (message.author.bot) return;
 
+    // check if a command was used
     if (message.content[0] == prefix) {
         executeCommands(message);
+        return;
     }
 
-    // lacks check if there is a mention
-    //if (message.mentions.users.first().id == 518344287554109450) {
-    //    message.channel.send("I, Artificial JoJo, have a dream.");
-    //}
+    // respond to personal things
+    if (message.mentions.users.array().length == 1 && message.mentions.users.first().id == 518344287554109450) {
+        executeDonations(message);
+    }
 
 });
 
@@ -45,7 +48,7 @@ function executeCommands(message) {
 
         case 'introduce':
 
-            message.channel.send("I, Artificial JoJo, have a golden dream \nI want to become a gang-star \nHence have to attain the rank of capo \nWill YOU help me gather 10,000,000,000 lires?");
+            message.channel.send("I, Artificial JoJo, have a golden dream \nI want to become a gang-star \nHence have to attain the rank of capo \nWill YOU help me gather 10,000,000,000 lire?");
             break;
         case 'loaves_eaten':
             // approximates the number of loaves you would have eaten in your life
@@ -61,31 +64,75 @@ function executeCommands(message) {
             ora(message.channel, args[0]);
             break;
 
-        // experimental code.
-        case 'doekoe':
-            // creates a doekoe variable in budget
-            client.memory["budget"] = {
-                amount: 0
-            };
-            fs.writeFile("./memory.json", JSON.stringify(client.memory, null, 4), err => {
-                if (err) throw err;
-                console.log("transferred");
-            });
-            break;
-        case 'donate':
-            receiveDonation(message.channel, message.author, 8);
-            break;
+        //// experimental code.
+        //case 'doekoe':
+        //    // creates a doekoe variable in budget
+        //    client.memory["budget"] = {
+        //        amount: 0
+        //    };
+        //    fs.writeFile("./memory.json", JSON.stringify(client.memory, null, 4), err => {
+        //        if (err) throw err;
+        //        console.log("transferred");
+        //    });
+        //    break;
+        //case 'donate':
+        //    receiveDonation(message.channel, 8);
+        //    break;
+    }
+    executeDonations(message);
+}
+
+// check for donations
+function executeDonations(message) {
+    let currency = Currency.detectCurrency(message.content);
+    if (currency == null) return;
+
+    if (currency.valueInLires > 0)
+        message.channel.send(thankYouMessage(message.author));
+    message.channel.send(currency.description);
+    receiveDonation(message.channel, currency.valueInLires);
+
+}
+
+class Currency {
+    
+    constructor(identifiers, description, valueInLires) {
+        this.identifiers = identifiers;
+        this.description = description;
+        this.valueInLires = valueInLires;
+    }
+
+    // in a given string it detects if a currency is mentioned
+    static detectCurrency(text) {
+        // goes over all different currencies
+        for (let currency of Currency.allCurrencies) {
+            // check all possible identifiers for a currency, as example "💲"
+            for (let identifier of currency.identifiers)
+                if (text.includes(identifier)) {
+                    return currency;
+                }
+        }
+
+        return null;
     }
 }
 
-// Donate lires
-function receiveDonation(channel, user, amount) {
-    channel.send(thankYouMessage(user));
-    let inBankAmount = client.memory["budget"].amount;
-    channel.send("I used to have " + inBankAmount);
+// collection of all possible currencies.
+Currency.allCurrencies = [
+    new Currency([":pound:", "💷"], "The value of 1 pound is 3097 lire", 3097),
+    new Currency([":euro:", "💶"], "The value of 1 euro is 1936 lire", 1936),
+    new Currency([":dollar:", "💵", ":heavy_dollar_sign: ", "💲"], "The value of 1 dollar is 1702 lire", 1702),
+    new Currency([":yen:", "💴"], "The value of 1 yen is 16 lire", 16),
+    new Currency([":money_with_wings:", "💸"], "*Th-The money is flying?!*\nゴ ゴ ゴ ゴ ゴ \nＴＨＩＳ 　ＭＵＳＴ 　ＢＥ 　ＴＨＥ 　ＷＯＲＫ 　ＯＦ 　ＡＮ 　ＥＮＥＭＹ 「ＳＴＡＮＤ」！！\nゴ ゴ ゴ ゴ ゴ ", 0),
+    new Currency([":moneybag:", "💰"], "Ah, a jute bag with a dollar sign. \nThanks?", 0)
+]
 
-    let totalAmount = updateAmount("budget", 9)
-    channel.send("Now I have " + totalAmount);
+// Donate lires
+function receiveDonation(channel, change) {
+    let inBankAmount = client.memory["budget"].amount;
+    let newAmount = updateAmount("budget", change);
+
+    channel.send(inBankAmount + " lire => " + newAmount + " lire");
 }
 
 function thankYouMessage(user) {
@@ -106,7 +153,8 @@ function thankYouMessage(user) {
         , "Kore wa ii"
         , "*yEy!* Fine, Thank You!"
         , "Arigotou gozaimasu"
-        , "GOURUDO EKUSUPERIENSU"];
+        , "GOURUDO EKUSUPERIENSU"
+        , "At this rate we will be at 10,000,000,000 lire in now time"];
     let random = Math.floor(Math.random() * responses.length);
 
     return responses[random];

@@ -16,16 +16,27 @@ client.on("ready", () => {
 
 //the thing that should be infront of commands
 const prefix = ";"
+// adds this emoji to our memory 
+const menacing = client.emojis.find(emoji => emoji.name === "menacing"); //TODO try make a more general version of this
 
 client.on("message", (message) => {
 
     if (message.author.bot) return;
 
+    if (message.content[0] == prefix) {
+        executeCommands(message);
+    }
+
+    // lacks check if there is a mention
+    //if (message.mentions.users.first().id == 518344287554109450) {
+    //    message.channel.send("I, Artificial JoJo, have a dream.");
+    //}
+
+});
+
+function executeCommands(message) {
     var args = message.content.substring(prefix.length).split(' ');
     var cmd = args[0];
-
-    // adds this emoji to our memory
-    const menacing = client.emojis.find(emoji => emoji.name === "menacing");
 
     // now the first args will be the thing following the command
     args = args.splice(1);
@@ -65,13 +76,7 @@ client.on("message", (message) => {
             receiveDonation(message.channel, message.author, 8);
             break;
     }
-
-    // lacks check if there is a mention
-    //if (message.mentions.users.first().id == 518344287554109450) {
-    //    message.channel.send("I, Artificial JoJo, have a dream.");
-    //}
-
-});
+}
 
 // Donate lires
 function receiveDonation(channel, user, amount) {

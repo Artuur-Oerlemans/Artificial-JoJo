@@ -109,23 +109,12 @@ function showProgress(channel) {
 
     embed.addField("Progress", "We have " + progress.toLocaleString() + " lire out of 10,000,000,000 lire.\nOnly " + (10000000000 - progress).toLocaleString() + " lire until I can get the rank of capo.");
 
-    embed.addField("Passione top 3", "**1.** " + leaderBoard[0].displayName + " " + leaderBoard[0].lires.toLocaleString()
-        + " lire\n2. " + leaderBoard[1].displayName + " " + leaderBoard[1].lires.toLocaleString() + " lire\n2. " + leaderBoard[2].displayName + " " + leaderBoard[2].lires.toLocaleString()) + " lire";
+    embed.addField("Passione top 3", "**1.** " + leaderBoard[0].displayName + " " + leaderBoard[0].goods.toLocaleString()
+        + " lire\n2. " + leaderBoard[1].displayName + " " + leaderBoard[1].goods.toLocaleString() + " lire\n2. " + leaderBoard[2].displayName + " " + leaderBoard[2].goods.toLocaleString()) + " lire";
 
     channel.send(embed);
 }
 
-// return leaderboard with format: id, displayName and [goods]
-function getLeaderBoard(goods) {
-    let contributors = client.memory["contributors"];
-
-    let leaderBoard = Object.keys(contributors).map(function (key) {
-        return { id: key, displayName: this[key].displayName, lires: this[key][goods] ? this[key][goods] : 0};
-    }, contributors);
-    leaderBoard.sort(function (p1, p2) { return p2[goods] - p1[goods]; });
-
-    return leaderBoard;
-}
 
 // check for donations
 function executeDonations(message) {
@@ -136,6 +125,7 @@ function executeDonations(message) {
         message.channel.send(thankYouMessage(message.author));
     message.channel.send(currency.description);
     receiveDonation(message.author, message.channel, currency.valueInLires);
+
 
 }
 
@@ -164,26 +154,67 @@ class Currency {
 
 // collection of all possible currencies.
 Currency.allCurrencies = [
-    new Currency([":money_mouth:", "🤑"], "*three bubbles approach*", 5106),
-    new Currency([":pound:", "💷"], "The value of 1 pound is 3097 lire", 3097),
-    new Currency([":euro:", "💶"], "The value of 1 euro is 1936 lire", 1936),
-    new Currency([":dollar:", "💵", ":heavy_dollar_sign: ", "💲"], "The value of 1 dollar is 1702 lire", 1702),
-    new Currency([":yen:", "💴"], "The value of 1 yen is 16 lire", 16),
-    new Currency([":money_with_wings:", "💸"], "*Th-The money is flying?!*\nゴ ゴ ゴ ゴ ゴ \nＴＨＩＳ 　ＭＵＳＴ 　ＢＥ 　ＴＨＥ 　ＷＯＲＫ 　ＯＦ 　ＡＮ 　ＥＮＥＭＹ 「ＳＴＡＮＤ」！！\nゴ ゴ ゴ ゴ ゴ ", 0),
-    new Currency([":gem:", "💎"], "*Cr-crazy diamondo?!*\nゴ ゴ ゴ ゴ ゴ \nＴＨＩＳ 　ＭＵＳＴ 　ＢＥ 　ＡＮ 　ＥＮＥＭＹ 「ＳＴＡＮＤ」！！\nゴ ゴ ゴ ゴ ゴ ", 0),
-    new Currency([":poop:", ":smiling_imp:", ":imp:", ":japanese_ogre:", ":japanese_goblin:", ":skull:", ":ghost:", ":alien:", ":robot:", ":clown:", ":levitate:"
-        , "💩", "😈", "👿", "👹", "👺", "💀", "👻", "👽", "🤖", "🤡", "🕴"], "ゴ ゴ ゴ ゴ ゴ \nＴＨＩＳ 　ＭＵＳＴ 　ＢＥ 　ＡＮ 　ＥＮＥＭＹ 「ＳＴＡＮＤ」！！\nゴ ゴ ゴ ゴ ゴ ", 0),
-    new Currency([":credit_card: ", "💳"], "Sorry, we don't accept credit cards", 0),
-    new Currency([":moneybag:", "💰"], "Ah, a jute bag with a dollar sign. \nThanks?", 0),
-    new Currency([":banana:", "🍌"], "*Chooses to stay at a safe distance.*", 0)
+    new Currency(["🦋"], "*Nanako's wallet just became a bit lighter*\nYou can't let your guard down in this server.", 10000),
+    new Currency(["🤑"], "*three bubbles approach*", 5106),
+    new Currency(["💷"], "The value of 1 pound is 3097 lire", 3097),
+    new Currency(["💶"], "The value of 1 euro is 1936 lire", 1936),
+    new Currency(["💵", "💲"], "The value of 1 dollar is 1702 lire", 1702),
+    new Currency(["💴"], "The value of 1 yen is 16 lire", 16),
+    new Currency(["doekoe"], "The value of 1 doekoe is 1 lire", 1),
+    new Currency(["💸"], "*Th-The money is flying?!*\nゴ ゴ ゴ ゴ ゴ \nＴＨＩＳ 　ＭＵＳＴ 　ＢＥ 　ＴＨＥ 　ＷＯＲＫ 　ＯＦ 　ＡＮ 　ＥＮＥＭＹ 「ＳＴＡＮＤ」！！\nゴ ゴ ゴ ゴ ゴ ", 0),
+    new Currency(["💎"], "*Cr-crazy diamondo?!*\nゴ ゴ ゴ ゴ ゴ \nＴＨＩＳ 　ＭＵＳＴ 　ＢＥ 　ＡＮ 　ＥＮＥＭＹ 「ＳＴＡＮＤ」！！\nゴ ゴ ゴ ゴ ゴ ", 0),
+    new Currency(["💩", "😈", "👿", "👹", "👺", "💀", "👻", "👽", "🤖", "🤡", "🕴"], "ゴ ゴ ゴ ゴ ゴ \nＴＨＩＳ 　ＭＵＳＴ 　ＢＥ 　ＡＮ 　ＥＮＥＭＹ 「ＳＴＡＮＤ」！！\nゴ ゴ ゴ ゴ ゴ ", 0),
+    new Currency(["💳"], "Sorry, we don't accept credit cards", 0),
+    new Currency(["💰"], "Ah, a jute bag with a dollar sign. \nThanks?", 0),
+    new Currency(["🛢"], ":boom:", 0),
+    new Currency(["🎁"], "ゴ ゴ ゴ ゴ ゴ \nＴＨＩＳ 　ＭＵＳＴ 　ＢＥ 　ＴＨＥ 　ＷＯＲＫ 　ＯＦ 　ＡＮ 　ＥＮＥＭＹ 「ＳＴＡＮＤ」！！\nゴ ゴ ゴ ゴ ゴ ", 0),
+    new Currency(["💣"], "*Ohhhh NOoohhhh*", 0),
+    new Currency(["🥖"], "grazie", 0),
+    new Currency(["🍌"], "*Chooses to stay at a safe distance.*", 0),
+    new Currency(["🚑"], "逃げるんだよ！！！", 0),
+    new Currency(["🐶", "🐕"], "This isn't a very good place for dogs", 0),
+    new Currency(["🐦", "🔥"], "**マジシャンズレッド！！**", 0),
+    new Currency(["⚰"], "ディオがいない！？！", 0),
+    new Currency(["🔪", "🗡"], "HINJAKU HINJAKU!!!", 0),
+    new Currency(["🍒"], "*lero lero lero lero*", 0),
+    new Currency(["🚙", "🏎", "🚗"], "Kars?!\nNigerundayo!!!!", 0),
+    new Currency(["⭐", "🌠", "✴", "🌟"], "**オラ　オラ　オラ　オラ！！！**", 0),
+    new Currency(["🗺", "🌐", "🕰", "🕐", "🕙", "🕥", "🕚", "🕦", "🕛", "🕧", "🕜", "🕑", "🕝", "🕒", "🕞", "🕓", "🕟"
+        , "🕔", "🕠", "🕕", "🕡", "🕖", "🕢", "🕗", "🕣", "🕘", "🕤", "⏰", "⏲", "⌚", "⏱"], "**TOKI WO TOMARE!!!**", 0),
+    new Currency(["🛅", "💼"], "*only contains a passport for an adult child*", 0),
+    new Currency(["🍨", "🍦"], "*Whe-where did avdol go?*", 0),
+    new Currency(["✈", "🛬", "🛫", "🛩"], "I will be the pilot\n:boom:", 0),
+    new Currency(["🖋", "🔏", "✍"], "**ヘブンズ・ドアー**\nI see, you met a stand made out of stone.", 0),
+    new Currency(["🤐"], "ゴ ゴ ゴ ゴ ゴ \nＴＨＩＳ 　ＭＵＳＴ 　ＢＥ 　ＴＨＥ 　ＷＯＲＫ 　ＯＦ 　Ａ~~Ｎ 　ＥＮＥＭＹ~~   friendly 「ＳＴＡＮＤ」！！\nゴ ゴ ゴ ゴ ゴ ", 0),
+    new Currency(["🔒", "🔐"], "ザ・ロック", 0),
+    new Currency(["🍞"], "グッ", 0),
+    new Currency(["🇮🇹"], "Per l'onore d'Italia", 0),
+    new Currency(["🇩🇪"], "馬鹿者が！！\nドイツの科学は世界一！！！", 0),
+    new Currency(["😱"], "OH MY GODD!!!!!", 0),
+    new Currency(["💪"], "*poses*", 0),
+    new Currency(["👅"], "This taste...\nIs the taste of a liar!\nArtificial JoJo\n*sweats*", 0),
+    new Currency(["🧀"], "シーザーー！！！", 0),
+    new Currency(["🇺🇸"], "*Di-did something just move?*", 0),
+    new Currency(["💅"], "How do I say this, I got a...", 0),
+    new Currency(["👌", "🖐", "🤚", "✋", "🖖", "🖕", "🤞", "🤙"], "**ザ・ハンド**", -1),
+    new Currency(["🔫"], "*Buys some salami to feed the bullets*\nThey all work so hard", -100)
 ]
 
 // Donate lires
 function receiveDonation(contributor, channel, change) {
     let inBank = client.memory["inventory"].lires;
-    let afterTransfer = updateInventory(contributor, "lires", change);
+    let afterTransfer = inBank;
+    if (change != 0) {
+        afterTransfer = updateInventory(contributor, "lires", change);
+    }
 
     channel.send(inBank + " lire => " + afterTransfer + " lire");
+    tellRanking(channel, "lires", contributor);
+}
+
+function tellRanking(channel, goods, contributor) {
+    ranking = getRanking(contributor.id, goods);
+    channel.send("ranking: " + ranking.rank);
 }
 
 function thankYouMessage(user) {
@@ -235,7 +266,10 @@ function updateInventory(contributor, goods, change) {
 // shout a battle cry a number of times
 function shoutOra(channel, timesNotParsed) {
     let times = parseInt(timesNotParsed);
-    if (isNaN(times) || times == 0) {
+    if (timesNotParsed == "e" || timesNotParsed == "pi") {
+        channel.send("なにィ！！");
+        channel.send("そんなバカな！！");
+    } else if (isNaN(times) || times == 0) {
         channel.send('だが断る');
     }
     else if (times > 665 || times < -665) {
@@ -256,4 +290,26 @@ function shoutOra(channel, timesNotParsed) {
 // repeats the string in repeated a number of times in bold format
 function boldRepetitive(text, times) {
     return "**" + text.repeat(times) + "**";
+}
+
+// gets the ranking of a person for a certain goods
+function getRanking(id, goods) {
+    leaderBoard = getLeaderBoard(goods)
+    for (let rank = 1; rank <= leaderBoard.length; rank++) {
+        if (leaderBoard[rank - 1].id == id)
+            return { rank: rank, goods: leaderBoard[rank - 1].goods };
+    }
+    return { rank: leaderBoard.length, goods: 0 };
+}
+
+// return leaderboard with format: id, displayName and [goods]
+function getLeaderBoard(goods) {
+    let contributors = client.memory["contributors"];
+
+    let leaderBoard = Object.keys(contributors).map(function (key) {
+        return { id: key, displayName: this[key].displayName, goods: this[key][goods] ? this[key][goods] : 0 };
+    }, contributors);
+    leaderBoard.sort(function (p1, p2) { return p2.goods - p1.goods; });
+
+    return leaderBoard;
 }

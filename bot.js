@@ -1,11 +1,11 @@
 ﻿const discord = require('discord.js');
-
-var client = new discord.Client();
-
+const fs = require("fs");
 const token = "NTE4MzQ0Mjg3NTU0MTA5NDUw.DuQYpw.Ibtms2TwuW1agDtb2-tQ-HL9Jl4";
 
-const fs = require("fs");
+var client = new discord.Client();
 client.memory = require("./memory.json");
+
+
 
 client.login(token);
 
@@ -21,10 +21,8 @@ const prefix = ";"
 // what to do when a message is received
 client.on("message", (message) => {
 
-
     // make certain the bot doesn't fall into a loop with another bot.
     if (message.author.bot) return;
-
 
     // check if a command was used
     if (message.content[0] == prefix) {
@@ -74,9 +72,9 @@ function tellLoavesEaten(channel, yearsUnfiltered) {
 
     let years = parseInt(yearsUnfiltered);
     if (isNaN(years) || years < 0) {
-        message.channel.send('グッ');
+        channel.send('グッ');
     } else {
-        message.channel.send(menacing.toString() + ' You have eaten about ' + Math.floor(60.3 * years) + ' loaves in your life.' + menacing.toString());
+        channel.send(menacing.toString() + ' You have eaten about ' + Math.floor(60.3 * years) + ' loaves in your life.' + menacing.toString());
     }
 }
 
@@ -102,23 +100,14 @@ function showHelp(channel) {
 }
 
 function showProgress(channel) {
-    embed = new discord.RichEmbed();
+    let progress = client.memory["inventory"].lires;
+    let leaderBoard = getLeaderBoard("lires")
+    let embed = new discord.RichEmbed();
+
     embed.setColor("FF5733");
     embed.setThumbnail("https://media.comicbook.com/2018/10/jojo-part-5-op-1138720-640x320.jpeg");
 
-    let progress = client.memory["inventory"].lires;
-
     embed.addField("Progress", "We have " + progress.toLocaleString() + " lire out of 10,000,000,000 lire.\nOnly " + (10000000000 - progress).toLocaleString() + " lire until I can get the rank of capo.");
-
-    //// Get the top 3 contributors
-    //let contributors = client.memory["contributors"];
-    //let leaderBoard = Object.keys(contributors).map(function (key) {
-    //    return { displayName: this[key].displayName, lires: this[key].lires };
-    //}, contributors);
-    //leaderBoard.sort(function (p1, p2) { return p2.lires - p1.lires; });
-    //let topThree = leaderBoard.slice(0, 3);
-
-    leaderBoard = getLeaderBoard("lires")
 
     embed.addField("Passione top 3", "**1.** " + leaderBoard[0].displayName + " " + leaderBoard[0].lires.toLocaleString()
         + " lire\n2. " + leaderBoard[1].displayName + " " + leaderBoard[1].lires.toLocaleString() + " lire\n2. " + leaderBoard[2].displayName + " " + leaderBoard[2].lires.toLocaleString()) + " lire";
@@ -126,6 +115,7 @@ function showProgress(channel) {
     channel.send(embed);
 }
 
+// return leaderboard with format: id, displayName and [goods]
 function getLeaderBoard(goods) {
     let contributors = client.memory["contributors"];
 
@@ -174,12 +164,15 @@ class Currency {
 
 // collection of all possible currencies.
 Currency.allCurrencies = [
+    new Currency([":money_mouth:", "🤑"], "*three bubbles approach*", 5106),
     new Currency([":pound:", "💷"], "The value of 1 pound is 3097 lire", 3097),
     new Currency([":euro:", "💶"], "The value of 1 euro is 1936 lire", 1936),
     new Currency([":dollar:", "💵", ":heavy_dollar_sign: ", "💲"], "The value of 1 dollar is 1702 lire", 1702),
     new Currency([":yen:", "💴"], "The value of 1 yen is 16 lire", 16),
     new Currency([":money_with_wings:", "💸"], "*Th-The money is flying?!*\nゴ ゴ ゴ ゴ ゴ \nＴＨＩＳ 　ＭＵＳＴ 　ＢＥ 　ＴＨＥ 　ＷＯＲＫ 　ＯＦ 　ＡＮ 　ＥＮＥＭＹ 「ＳＴＡＮＤ」！！\nゴ ゴ ゴ ゴ ゴ ", 0),
     new Currency([":gem:", "💎"], "*Cr-crazy diamondo?!*\nゴ ゴ ゴ ゴ ゴ \nＴＨＩＳ 　ＭＵＳＴ 　ＢＥ 　ＡＮ 　ＥＮＥＭＹ 「ＳＴＡＮＤ」！！\nゴ ゴ ゴ ゴ ゴ ", 0),
+    new Currency([":poop:", ":smiling_imp:", ":imp:", ":japanese_ogre:", ":japanese_goblin:", ":skull:", ":ghost:", ":alien:", ":robot:", ":clown:", ":levitate:"
+        , "💩", "😈", "👿", "👹", "👺", "💀", "👻", "👽", "🤖", "🤡", "🕴"], "ゴ ゴ ゴ ゴ ゴ \nＴＨＩＳ 　ＭＵＳＴ 　ＢＥ 　ＡＮ 　ＥＮＥＭＹ 「ＳＴＡＮＤ」！！\nゴ ゴ ゴ ゴ ゴ ", 0),
     new Currency([":credit_card: ", "💳"], "Sorry, we don't accept credit cards", 0),
     new Currency([":moneybag:", "💰"], "Ah, a jute bag with a dollar sign. \nThanks?", 0),
     new Currency([":banana:", "🍌"], "*Chooses to stay at a safe distance.*", 0)
@@ -212,7 +205,6 @@ function thankYouMessage(user) {
 
     return responses[random];
 }
-
 
 // change the quantity of a certain goods in the JSON file.
 function updateInventory(contributor, goods, change) {

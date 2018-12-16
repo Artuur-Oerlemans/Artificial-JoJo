@@ -1,5 +1,27 @@
 {
-    "budget": {
-        "amount": 11787
+    "inventory": {
+        "lires": 84181
+    },
+    "contributors": {
+        "12345": {
+            "displayName": "Boss",
+            "lires": 0
+        },
+        "12346": {
+            "displayName": "Doppio",
+            "lires": 1
+        },
+        "163668657740709889": {
+            "displayName": "Orlomakker",
+            "lires": 16656
+        },
+        "94177486702641152": {
+            "displayName": "why did I name my son sletje",
+            "lires": 19512
+        },
+        "157929537215266818": {
+            "displayName": "Tom2",
+            "lires": 5106
+        }
     }
 }

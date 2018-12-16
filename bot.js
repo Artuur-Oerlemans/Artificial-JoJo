@@ -16,8 +16,6 @@ client.on("ready", () => {
 
 //the thing that should be infront of commands
 const prefix = ";"
-// adds this emoji to our memory 
-const menacing = client.emojis.find(emoji => emoji.name === "menacing"); //TODO try make a more general version of this
 
 client.on("message", (message) => {
 
@@ -50,8 +48,10 @@ function executeCommands(message) {
 
             message.channel.send("I, Artificial JoJo, have a golden dream \nI want to become a gang-star \nHence have to attain the rank of capo \nWill YOU help me gather 10,000,000,000 lire?");
             break;
-        case 'loaves_eaten':
             // approximates the number of loaves you would have eaten in your life
+        case 'loaves_eaten':
+            // adds this emoji to our memory 
+            let menacing = client.emojis.find(emoji => emoji.name === "menacing");
             let years = parseInt(args[0]);
             if (isNaN(years) || years < 0) {
                 message.channel.send('グッ');
@@ -63,21 +63,44 @@ function executeCommands(message) {
         case 'ora':
             ora(message.channel, args[0]);
             break;
+        // shows the possible commands
+        case "help":
+            embed = new discord.RichEmbed();
+            embed.setColor("FF5733");
+            embed.setThumbnail("https://vignette.wikia.nocookie.net/jjba/images/a/ab/Joseph-oh-my-god.jpg/revision/latest?cb=20140807173126");
 
-        //// experimental code.
-        //case 'doekoe':
-        //    // creates a doekoe variable in budget
-        //    client.memory["budget"] = {
-        //        amount: 0
-        //    };
-        //    fs.writeFile("./memory.json", JSON.stringify(client.memory, null, 4), err => {
-        //        if (err) throw err;
-        //        console.log("transferred");
-        //    });
-        //    break;
-        //case 'donate':
-        //    receiveDonation(message.channel, 8);
-        //    break;
+            embed.addField(";progress", "Show how far I'm at becoming a gang-star");
+            embed.addField(";introduce", "I, Artificial JoJo, will give a short introduction to my golden dream.");
+            embed.addField(";loaves_eaten", "Give how old you are and it calculates how many loaves you have eaten.");
+            embed.addField(";ora", "Give the amount of times you want ora");
+            embed.addField("contribute!", "In order to fullfil my dream of become a gang-star I need doekoe.\nMention me with any form of money to help me.")
+
+
+            message.channel.send(embed);
+
+            break;
+        case "progress":
+            embed = new discord.RichEmbed();
+            embed.setColor("FF5733");
+            embed.setThumbnail("https://media.comicbook.com/2018/10/jojo-part-5-op-1138720-640x320.jpeg");
+
+            let progress = client.memory["inventory"].lires;
+
+            embed.addField("Progress", "We have " + progress.toLocaleString() + " lire out of 10,000,000,000 lire.\nOnly " + (10000000000 - progress).toLocaleString() + " lire until I can get the rank of capo.");
+
+            // Get the top 3 contributors
+            let contributors = client.memory["contributors"];
+            let leaderBoard = Object.keys(contributors).map(function (key) {
+                return { displayName: this[key].displayName, lires: this[key].lires };
+            }, contributors);
+            leaderBoard.sort(function (p1, p2) { return p2.lires - p1.lires; });
+            let topThree = leaderBoard.slice(0, 3);
+
+            embed.addField("Passione top 3", "**1.** " + topThree[0].displayName + " " + topThree[0].lires.toLocaleString()
+                + " lire\n2. " + topThree[1].displayName + " " + topThree[1].lires.toLocaleString() + " lire\n2. " + topThree[2].displayName + " " + topThree[2].lires.toLocaleString()) + " lire";
+
+            message.channel.send(embed);
+            break;
     }
     executeDonations(message);
 }
@@ -90,7 +113,7 @@ function executeDonations(message) {
     if (currency.valueInLires > 0)
         message.channel.send(thankYouMessage(message.author));
     message.channel.send(currency.description);
-    receiveDonation(message.channel, currency.valueInLires);
+    receiveDonation(message.author, message.channel, currency.valueInLires);
 
 }
 
@@ -124,29 +147,27 @@ Currency.allCurrencies = [
     new Currency([":dollar:", "💵", ":heavy_dollar_sign: ", "💲"], "The value of 1 dollar is 1702 lire", 1702),
     new Currency([":yen:", "💴"], "The value of 1 yen is 16 lire", 16),
     new Currency([":money_with_wings:", "💸"], "*Th-The money is flying?!*\nゴ ゴ ゴ ゴ ゴ \nＴＨＩＳ 　ＭＵＳＴ 　ＢＥ 　ＴＨＥ 　ＷＯＲＫ 　ＯＦ 　ＡＮ 　ＥＮＥＭＹ 「ＳＴＡＮＤ」！！\nゴ ゴ ゴ ゴ ゴ ", 0),
-    new Currency([":moneybag:", "💰"], "Ah, a jute bag with a dollar sign. \nThanks?", 0)
+    new Currency([":gem:", "💎"], "*Cr-crazy diamondo?!*\nゴ ゴ ゴ ゴ ゴ \nＴＨＩＳ 　ＭＵＳＴ 　ＢＥ 　ＡＮ 　ＥＮＥＭＹ 「ＳＴＡＮＤ」！！\nゴ ゴ ゴ ゴ ゴ ", 0),
+    new Currency([":credit_card: ", "💳"], "Sorry, we don't accept credit cards", 0),
+    new Currency([":moneybag:", "💰"], "Ah, a jute bag with a dollar sign. \nThanks?", 0),
+    new Currency([":banana:", "🍌"], "*Chooses to stay at a safe distance.*", 0)
 ]
 
 // Donate lires
-function receiveDonation(channel, change) {
-    let inBankAmount = client.memory["budget"].amount;
-    let newAmount = updateAmount("budget", change);
+function receiveDonation(contributor, channel, change) {
+    let inBank = client.memory["inventory"].lires;
+    let afterTransfer = updateInventory(contributor, "lires", change);
 
-    channel.send(inBankAmount + " lire => " + newAmount + " lire");
+    channel.send(inBank + " lire => " + afterTransfer + " lire");
 }
 
 function thankYouMessage(user) {
-    let nickname;
-    if (user.nickname == null) {
-        nickname = user.nickname;
-    } else {
-        nickname = user.username;
-    }
+    let displayName = user.lastMessage.member.displayName;
 
     let responses = ["GURETO DESU-YO!"
         , "Naissu"
         , "Grazie"
-        , "Berry naissu " + nickname + "-chan"
+        , "Berry naissu " + displayName + "-chan"
         , "Hey baby"
         , "OH MY GOD!!!"
         , "MUDA JANAI"
@@ -161,23 +182,35 @@ function thankYouMessage(user) {
 }
 
 
-// Increase the amount of something in the JSON file.
-function updateAmount(collection, change) {
-    let inBankAmount = client.memory[collection].amount;
-    let totalAmount = inBankAmount + change;
+// change the quantity of a certain goods in the JSON file.
+function updateInventory(contributor, goods, change) {
+    // update the inventory value
+    let inBank = client.memory["inventory"][goods];
+    let afterTransfer = inBank + change;
+    client.memory["inventory"][goods] = afterTransfer;
 
-    client.memory[collection] = {
-        amount: totalAmount
-    };
+    // register the contribution
+    let displayName = contributor.lastMessage.member.displayName;
+
+    // check if the user is already in the database
+    if (!client.memory["contributors"][contributor.id])
+        client.memory["contributors"][contributor.id] = { displayName: displayName };
+
+    // check if previous contributions have already with these goods
+    let afterContribution = client.memory["contributors"][contributor.id][goods] ? client.memory["contributors"][contributor.id][goods] + change : change;
+  
+    client.memory["contributors"][contributor.id][goods] = afterContribution;
+
+    // sync to memory.json
     fs.writeFile("./memory.json", JSON.stringify(client.memory, null, 4), err => {
         if (err) throw err;
     });
-    return totalAmount;
+    return afterTransfer;
 }
 
 // add send a shout a number of times
-function ora(channel, amount) {
-    let times = parseInt(amount);
+function ora(channel, timesNotParsed) {
+    let times = parseInt(timesNotParsed);
     if (isNaN(times) || times == 0) {
         channel.send('だが断る');
     }
@@ -192,9 +225,8 @@ function ora(channel, amount) {
         channel.send(boldRepetitive("オラ ", times));
     }
     else if (times < 0) {
-        channel.send(boldRepetitive("無駄 ", times));
+        channel.send(boldRepetitive("無駄 ", -times));
     }
-
 }
 
 // repeats the string in repeated a number of times in bold format

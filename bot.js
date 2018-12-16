@@ -7,9 +7,10 @@ const token = "NTE4MzQ0Mjg3NTU0MTA5NDUw.DuQYpw.Ibtms2TwuW1agDtb2-tQ-HL9Jl4";
 const fs = require("fs");
 client.memory = require("./memory.json");
 
+client.login(token);
+
 client.on("ready", () => {
     console.log("ready");
-
 
     client.user.setActivity("Oh, That's A Baseball!", { type: "PLAYING" });
 });
@@ -17,10 +18,13 @@ client.on("ready", () => {
 //the thing that should be infront of commands
 const prefix = ";"
 
+// what to do when a message is received
 client.on("message", (message) => {
+
 
     // make certain the bot doesn't fall into a loop with another bot.
     if (message.author.bot) return;
+
 
     // check if a command was used
     if (message.content[0] == prefix) {
@@ -45,64 +49,92 @@ function executeCommands(message) {
     switch (cmd) {
 
         case 'introduce':
-
-            message.channel.send("I, Artificial JoJo, have a golden dream \nI want to become a gang-star \nHence have to attain the rank of capo \nWill YOU help me gather 10,000,000,000 lire?");
+            showIntroduction(message.channel);
             break;
-            // approximates the number of loaves you would have eaten in your life
         case 'loaves_eaten':
-            // adds this emoji to our memory 
-            let menacing = client.emojis.find(emoji => emoji.name === "menacing");
-            let years = parseInt(args[0]);
-            if (isNaN(years) || years < 0) {
-                message.channel.send('グッ');
-            } else {
-                message.channel.send(menacing.toString() + ' You have eaten about ' + Math.floor(60.3 * years) + ' loaves in your life.' + menacing.toString());
-            }
+            tellLoavesEaten(message.channel, args[0]);
             break;
-
         case 'ora':
-            ora(message.channel, args[0]);
+            shoutOra(message.channel, args[0]);
             break;
         // shows the possible commands
         case "help":
-            embed = new discord.RichEmbed();
-            embed.setColor("FF5733");
-            embed.setThumbnail("https://vignette.wikia.nocookie.net/jjba/images/a/ab/Joseph-oh-my-god.jpg/revision/latest?cb=20140807173126");
-
-            embed.addField(";progress", "Show how far I'm at becoming a gang-star");
-            embed.addField(";introduce", "I, Artificial JoJo, will give a short introduction to my golden dream.");
-            embed.addField(";loaves_eaten", "Give how old you are and it calculates how many loaves you have eaten.");
-            embed.addField(";ora", "Give the amount of times you want ora");
-            embed.addField("contribute!", "In order to fullfil my dream of become a gang-star I need doekoe.\nMention me with any form of money to help me.")
-
-
-            message.channel.send(embed);
-
+            showHelp(message.channel);
             break;
         case "progress":
-            embed = new discord.RichEmbed();
-            embed.setColor("FF5733");
-            embed.setThumbnail("https://media.comicbook.com/2018/10/jojo-part-5-op-1138720-640x320.jpeg");
-
-            let progress = client.memory["inventory"].lires;
-
-            embed.addField("Progress", "We have " + progress.toLocaleString() + " lire out of 10,000,000,000 lire.\nOnly " + (10000000000 - progress).toLocaleString() + " lire until I can get the rank of capo.");
-
-            // Get the top 3 contributors
-            let contributors = client.memory["contributors"];
-            let leaderBoard = Object.keys(contributors).map(function (key) {
-                return { displayName: this[key].displayName, lires: this[key].lires };
-            }, contributors);
-            leaderBoard.sort(function (p1, p2) { return p2.lires - p1.lires; });
-            let topThree = leaderBoard.slice(0, 3);
-
-            embed.addField("Passione top 3", "**1.** " + topThree[0].displayName + " " + topThree[0].lires.toLocaleString()
-                + " lire\n2. " + topThree[1].displayName + " " + topThree[1].lires.toLocaleString() + " lire\n2. " + topThree[2].displayName + " " + topThree[2].lires.toLocaleString()) + " lire";
-
-            message.channel.send(embed);
+            showProgress(message.channel);
             break;
     }
     executeDonations(message);
+}
+
+function tellLoavesEaten(channel, yearsUnfiltered) {
+    // adds this emoji to our memory 
+    let menacing = client.emojis.find(emoji => emoji.name === "menacing");
+
+    let years = parseInt(yearsUnfiltered);
+    if (isNaN(years) || years < 0) {
+        message.channel.send('グッ');
+    } else {
+        message.channel.send(menacing.toString() + ' You have eaten about ' + Math.floor(60.3 * years) + ' loaves in your life.' + menacing.toString());
+    }
+}
+
+function showIntroduction(channel) {
+    channel.send("I, Artificial JoJo, have a golden dream");
+    channel.send("I want to become a gang-star");
+    channel.send("Hence have to attain the rank of capo");
+    channel.send("Will YOU help me gather 10,000,000,000 lire?");
+}
+
+function showHelp(channel) {
+    embed = new discord.RichEmbed();
+    embed.setColor("FF5733");
+    embed.setThumbnail("https://vignette.wikia.nocookie.net/jjba/images/a/ab/Joseph-oh-my-god.jpg/revision/latest?cb=20140807173126");
+
+    embed.addField(";progress", "Show how far I'm at becoming a gang-star");
+    embed.addField(";introduce", "I, Artificial JoJo, will give a short introduction to my golden dream.");
+    embed.addField(";loaves_eaten", "Give how old you are and it calculates how many loaves you have eaten.");
+    embed.addField(";ora", "Give the amount of times you want ora");
+    embed.addField("contribute!", "In order to fullfil my dream of become a gang-star I need doekoe.\nMention me with any form of money to help me.")
+
+    channel.send(embed);
+}
+
+function showProgress(channel) {
+    embed = new discord.RichEmbed();
+    embed.setColor("FF5733");
+    embed.setThumbnail("https://media.comicbook.com/2018/10/jojo-part-5-op-1138720-640x320.jpeg");
+
+    let progress = client.memory["inventory"].lires;
+
+    embed.addField("Progress", "We have " + progress.toLocaleString() + " lire out of 10,000,000,000 lire.\nOnly " + (10000000000 - progress).toLocaleString() + " lire until I can get the rank of capo.");
+
+    //// Get the top 3 contributors
+    //let contributors = client.memory["contributors"];
+    //let leaderBoard = Object.keys(contributors).map(function (key) {
+    //    return { displayName: this[key].displayName, lires: this[key].lires };
+    //}, contributors);
+    //leaderBoard.sort(function (p1, p2) { return p2.lires - p1.lires; });
+    //let topThree = leaderBoard.slice(0, 3);
+
+    leaderBoard = getLeaderBoard("lires")
+
+    embed.addField("Passione top 3", "**1.** " + leaderBoard[0].displayName + " " + leaderBoard[0].lires.toLocaleString()
+        + " lire\n2. " + leaderBoard[1].displayName + " " + leaderBoard[1].lires.toLocaleString() + " lire\n2. " + leaderBoard[2].displayName + " " + leaderBoard[2].lires.toLocaleString()) + " lire";
+
+    channel.send(embed);
+}
+
+function getLeaderBoard(goods) {
+    let contributors = client.memory["contributors"];
+
+    let leaderBoard = Object.keys(contributors).map(function (key) {
+        return { id: key, displayName: this[key].displayName, lires: this[key][goods] ? this[key][goods] : 0};
+    }, contributors);
+    leaderBoard.sort(function (p1, p2) { return p2[goods] - p1[goods]; });
+
+    return leaderBoard;
 }
 
 // check for donations
@@ -208,8 +240,8 @@ function updateInventory(contributor, goods, change) {
     return afterTransfer;
 }
 
-// add send a shout a number of times
-function ora(channel, timesNotParsed) {
+// shout a battle cry a number of times
+function shoutOra(channel, timesNotParsed) {
     let times = parseInt(timesNotParsed);
     if (isNaN(times) || times == 0) {
         channel.send('だが断る');
@@ -233,5 +265,3 @@ function ora(channel, timesNotParsed) {
 function boldRepetitive(text, times) {
     return "**" + text.repeat(times) + "**";
 }
-
-client.login(token);

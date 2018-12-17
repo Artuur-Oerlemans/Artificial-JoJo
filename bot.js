@@ -18,6 +18,8 @@ client.on("ready", () => {
 //the thing that should be infront of commands
 const prefix = ";"
 
+client.on('error', console.error);
+
 // what to do when a message is received
 client.on("message", (message) => {
 
@@ -99,6 +101,25 @@ function showHelp(channel) {
     channel.send(embed);
 }
 
+// gets the next time that it is that day and hour. 
+// Sunday = 0
+function getNextTime(day, hour) {
+    var now = new Date();
+    var nextTime = new Date();
+    //go to correct day of the week
+    nextTime.setDate(nextTime.getDate() + (1 + day - nextTime.getDay()) % 7);
+    //if that is after the hour, go to next week.
+    if (now.getDay() == day && now.getHours() > hour - 1) {
+        nextTime.setDate(nextTime.getDate() + 7 + (day + 7 - nextTime.getDay()) % 7);
+    } 
+    // set to the correct hour
+    nextTime.setHours(20);
+    nextTime.setMinutes(0);
+    nextTime.setSeconds(0);
+
+    return nextTime;
+}
+
 function showProgress(channel) {
     let progress = client.memory["inventory"].lires;
     let leaderBoard = getLeaderBoard("lires")
@@ -113,6 +134,9 @@ function showProgress(channel) {
         + " lire\n2. " + leaderBoard[1].displayName + " " + leaderBoard[1].goods.toLocaleString() + " lire\n2. " + leaderBoard[2].displayName + " " + leaderBoard[2].goods.toLocaleString()) + " lire";
 
     channel.send(embed);
+}
+
+function showTimeNextEpisode(channel) {
 }
 
 
@@ -164,6 +188,7 @@ Currency.allCurrencies = [
     new Currency(["💸"], "*Th-The money is flying?!*\nゴ ゴ ゴ ゴ ゴ \nＴＨＩＳ 　ＭＵＳＴ 　ＢＥ 　ＴＨＥ 　ＷＯＲＫ 　ＯＦ 　ＡＮ 　ＥＮＥＭＹ 「ＳＴＡＮＤ」！！\nゴ ゴ ゴ ゴ ゴ ", 0),
     new Currency(["💎"], "*Cr-crazy diamondo?!*\nゴ ゴ ゴ ゴ ゴ \nＴＨＩＳ 　ＭＵＳＴ 　ＢＥ 　ＡＮ 　ＥＮＥＭＹ 「ＳＴＡＮＤ」！！\nゴ ゴ ゴ ゴ ゴ ", 0),
     new Currency(["💩", "😈", "👿", "👹", "👺", "💀", "👻", "👽", "🤖", "🤡", "🕴", "🛥", "🚤", "🛳"], "ゴ ゴ ゴ ゴ ゴ \nＴＨＩＳ 　ＭＵＳＴ 　ＢＥ 　ＡＮ 　ＥＮＥＭＹ 「ＳＴＡＮＤ」！！\nゴ ゴ ゴ ゴ ゴ ", 0),
+    // 24 emojis
     new Currency(["🐒", "🐵", "🦍"], "ゴ ゴ ゴ ゴ ゴ \nＴＨＩＳ 　ＭＵＳＴ 　ＢＥ 　ＡＮ 　ＥＮＥＭＹ 「ＳＴＡＮＤ」 ＵＳＥＲ！！\nゴ ゴ ゴ ゴ ゴ ", 0),
     new Currency(["💳"], "Sorry, we don't accept credit cards", 0),
     new Currency(["💰"], "Ah, a jute bag with a dollar sign. \nThanks?", 0),
@@ -182,10 +207,12 @@ Currency.allCurrencies = [
     new Currency(["🍒"], "*lero lero lero lero*", 0),
     new Currency(["🚙", "🏎", "🚗"], "Kars?!\nNigerundayo!!!!", 0),
     new Currency(["⭐", "🌠", "✴", "🌟"], "**オラ　オラ　オラ　オラ！！！**", 0),
+    // 28 emojis
     new Currency(["🗺", "🌐", "🌍", "🌎", "🌏"], "**最強のパワーだ！！！**", 0),
     new Currency(["⏸", "🕰", "🕐", "🕙", "🕥", "🕚", "🕦", "🕛", "🕧", "🕜", "🕑"
         , "🕝", "🕒", "🕞", "🕓", "🕟", "🕔", "🕠", "🕕", "🕡", "🕖", "🕢", "🕗"
         , "🕣", "🕘", "🕤", "⏰", "⏲", "⌚", "⏱"], "**TOKI WO TOMARE!!!**", 0),
+    //36 emojis
     new Currency(["🛅", "💼"], "*only contains a passport for an adult child*", 0),
     new Currency(["⏩"], "It was all made in heaven.", 0),
     new Currency(["🤺"], 'The "Chariot" symbolizes invasion and victory.', 0),
@@ -198,6 +225,7 @@ Currency.allCurrencies = [
     new Currency(["🍨", "🍦"], "*Whe-where did avdol go?*", 0),
     new Currency(["👣"], "Because I'm a highway staaarrrrrr!!!!!", 0),
     new Currency(["✈", "🛬", "🛫"], "I will be the pilot\n:boom:", 0),
+    //26 emojis
     new Currency(["🛩"], "16 X 55 lire", 28),
     new Currency(["🖋", "🔏", "✍"], "**ヘブンズ・ドアー**\nI see, you met a stand made out of stone.", 0),
     new Currency(["🤐"], "ゴ ゴ ゴ ゴ ゴ \nＴＨＩＳ 　ＭＵＳＴ 　ＢＥ 　ＴＨＥ 　ＷＯＲＫ 　ＯＦ 　Ａ~~Ｎ 　ＥＮＥＭＹ~~   friendly 「ＳＴＡＮＤ」！！\nゴ ゴ ゴ ゴ ゴ ", 0),
@@ -212,7 +240,9 @@ Currency.allCurrencies = [
     new Currency(["🧀"], "シーザーー！！！", 0),
     new Currency(["💅"], "How do I say this, I got a...", 0),
     new Currency(["👌", "🖐", "🤚", "✋", "🖖", "🖕", "🤞", "🤙"], "**ザ・ハンド**", -1),
-    new Currency(["🔫"], "*Buys some salami to feed the bullets*\nThey all work so hard", -100)
+    //25 emojis
+    new Currency(["🔫"], "*Buys some salami to feed the bullets*\nThey all work so hard", -100),
+    new Currency(["🚓", "🚔", "👮"], "There is no problem here.", -100)
 ]
 
 // Donate lires

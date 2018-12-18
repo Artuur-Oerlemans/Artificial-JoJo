@@ -57,12 +57,14 @@ function executeCommands(message) {
         case 'ora':
             shoutOra(message.channel, args[0]);
             break;
-        // shows the possible commands
         case "help":
             showHelp(message.channel);
             break;
         case "progress":
             showProgress(message.channel);
+            break;
+        case "countdown":
+            showCountdownNextEpisode(message.channel);
             break;
     }
     executeDonations(message);
@@ -96,28 +98,64 @@ function showHelp(channel) {
     embed.addField(";introduce", "I, Artificial JoJo, will give a short introduction to my golden dream.");
     embed.addField(";loaves_eaten", "Give how old you are and it calculates how many loaves you have eaten.");
     embed.addField(";ora", "Give the amount of times you want ora");
+    embed.addField(";countdown", "Tells how long until the next episode.");
     embed.addField("contribute!", "In order to fullfil my dream of become a gang-star I need doekoe.\nMention me with any form of money to help me.")
 
     channel.send(embed);
 }
 
+
+function showCountdownNextEpisode(channel) {
+    now = new Date();
+    nextEpisodeDate = getNextDate(5, 20);
+    channel.send(differenceDatesDHHMMSS(now, nextEpisodeDate)
+        + " until the next episode of JoJo's bizarre adventure part 5: Golden Wind.");
+}
+
 // gets the next time that it is that day and hour. 
 // Sunday = 0
-function getNextTime(day, hour) {
+function getNextDate(day, hour) {
     var now = new Date();
     var nextTime = new Date();
     //go to correct day of the week
-    nextTime.setDate(nextTime.getDate() + (1 + day - nextTime.getDay()) % 7);
+    nextTime.setDate(nextTime.getDate() + (day + 7 - nextTime.getDay()) % 7);
     //if that is after the hour, go to next week.
     if (now.getDay() == day && now.getHours() > hour - 1) {
-        nextTime.setDate(nextTime.getDate() + 7 + (day + 7 - nextTime.getDay()) % 7);
-    } 
+        nextTime.setDate(nextTime.getDate() + 7);
+    }
     // set to the correct hour
     nextTime.setHours(20);
     nextTime.setMinutes(0);
     nextTime.setSeconds(0);
 
     return nextTime;
+}
+
+function differenceDatesDHHMMSS(date1, date2) {
+    let output = "";
+    let differenceMilliseconds = date2.getTime() - date1.getTime();
+
+    let oneSecond = 1000;
+    let oneMinute = 60 * oneSecond;
+    let oneHour = 60 * oneMinute;
+    let oneDay = 24 * oneHour;
+
+    let seconds = Math.floor((differenceMilliseconds / oneSecond) % 1000);
+    let minutes = Math.floor((differenceMilliseconds / oneMinute) % 60);
+    let hours = Math.floor((differenceMilliseconds / oneHour) % 24);
+    let days = Math.floor(differenceMilliseconds / oneDay);
+
+    if (days == 1) {
+        output += days + " day and "
+    } else if (days > 1) {
+        output += days + " days and "
+    }
+    output += twoDigits(hours) + ":" + twoDigits(minutes) + ":" + twoDigits(seconds);
+    return output;
+}
+
+function twoDigits(number) {
+    return ('0' + number).slice(-2);
 }
 
 function showProgress(channel) {
@@ -136,8 +174,6 @@ function showProgress(channel) {
     channel.send(embed);
 }
 
-function showTimeNextEpisode(channel) {
-}
 
 
 // check for donations

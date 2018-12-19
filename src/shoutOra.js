@@ -27,4 +27,4 @@ function boldRepetitive(text, times) {
     return "**" + text.repeat(times) + "**";
 }
 
-module.exports = shoutOra;
+export default shoutOra;

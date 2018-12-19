@@ -1,18 +1,22 @@
-﻿const discord = require('discord.js');
-const fs = require("fs");
-const token = "NTE4MzQ0Mjg3NTU0MTA5NDUw.DuQYpw.Ibtms2TwuW1agDtb2-tQ-HL9Jl4";
+﻿import * as discord from "discord.js";
+import Currency from "./currency";
+import shoutOra from "./shoutOra";
+import * as fs from "fs";
 
+
+const token = "NTE4MzQ0Mjg3NTU0MTA5NDUw.DuQYpw.Ibtms2TwuW1agDtb2-tQ-HL9Jl4";
 var client = new discord.Client();
 client.memory = require("./memory.json");
-const Currency = require("./currency.js");
-const shoutOra = require("./shoutOra.js");
-
-
-client.login(token);
+client.login(token)
+    .then((e) => { //Handle promises, unhandled promises will be deprecated soon.
+        console.log("Discord logged in!");
+    }).catch(error => {
+        console.log("Discord failed to login!");
+        console.log(error);
+    });
 
 client.on("ready", () => {
     console.log("ready");
-
     client.user.setActivity("Oh, That's A Baseball!", { type: "PLAYING" });
 });
 
@@ -46,7 +50,7 @@ function executeCommands(message) {
 
     // now the first args will be the thing following the command
     args = args.splice(1);
-
+    
     switch (cmd) {
 
         case 'introduce':
@@ -104,7 +108,6 @@ function showHelp(channel) {
 
     channel.send(embed);
 }
-
 
 function showCountdownNextEpisode(channel) {
     now = new Date();

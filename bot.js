@@ -1,6 +1,6 @@
 ﻿const discord = require('discord.js');
 const fs = require("fs");
-const token = "NTE4MzQ0Mjg3NTU0MTA5NDUw.DuQYpw.Ibtms2TwuW1agDtb2-tQ-HL9Jl4";
+const token = require("./token.json").token;
 
 var client = new discord.Client();
 client.memory = require("./memory.json");

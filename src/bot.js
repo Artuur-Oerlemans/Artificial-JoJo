@@ -1,18 +1,22 @@
-﻿const discord = require('discord.js');
-const fs = require("fs");
 const token = require("./token.json").token;
+﻿import * as discord from "discord.js";
+import Currency from "./currency";
+import shoutOra from "./shoutOra";
+import * as fs from "fs";
 
 var client = new discord.Client();
 client.memory = require("./memory.json");
-const Currency = require("./currency.js");
-const shoutOra = require("./shoutOra.js");
 
-
-client.login(token);
+client.login(token)
+    .then((e) => { //Handle promises, unhandled promises will be deprecated soon.
+        console.log("Discord logged in!");
+    }).catch(error => {
+        console.log("Discord failed to login!");
+        console.log(error);
+    });
 
 client.on("ready", () => {
     console.log("ready");
-
     client.user.setActivity("Oh, That's A Baseball!", { type: "PLAYING" });
 });
 
@@ -46,7 +50,7 @@ function executeCommands(message) {
 
     // now the first args will be the thing following the command
     args = args.splice(1);
-
+    
     switch (cmd) {
 
         case 'introduce':
@@ -105,10 +109,9 @@ function showHelp(channel) {
     channel.send(embed);
 }
 
-
 function showCountdownNextEpisode(channel) {
-    now = new Date();
-    nextEpisodeDate = getNextDate(5, 20);
+    let now = new Date();
+    let nextEpisodeDate = getNextDate(5, 20);
     channel.send(differenceDatesDHHMMSS(now, nextEpisodeDate)
         + " until the next episode of JoJo's bizarre adventure part 5: Golden Wind.");
 }
@@ -116,8 +119,8 @@ function showCountdownNextEpisode(channel) {
 // gets the next time that it is that day and hour. 
 // Sunday = 0
 function getNextDate(day, hour) {
-    var now = new Date();
-    var nextTime = new Date();
+    let now = new Date();
+    let nextTime = new Date();
     //go to correct day of the week
     nextTime.setDate(nextTime.getDate() + (day + 7 - nextTime.getDay()) % 7);
     //if that is after the hour, go to next week.
@@ -179,6 +182,8 @@ function showProgress(channel) {
 
 // check for donations
 function executeDonations(message) {
+    console.log(message.content);
+
     let currency = Currency.detectCurrency(message.content);
     if (currency == null) return;
 
@@ -203,7 +208,7 @@ function receiveDonation(contributor, channel, change) {
 }
 
 function tellRanking(channel, goods, contributor) {
-    ranking = getRanking(contributor.id, goods);
+    let ranking = getRanking(contributor.id, goods);
     channel.send("ranking: " + ranking.rank);
 }
 
@@ -233,7 +238,7 @@ function updateInventory(contributor, goods, change) {
     let inBank = client.memory["inventory"][goods];
     let afterTransfer = inBank + change;
     client.memory["inventory"][goods] = afterTransfer;
-
+    console.log(afterTransfer);
     // register the contribution
     let displayName = contributor.lastMessage.member.displayName;
 
@@ -243,6 +248,7 @@ function updateInventory(contributor, goods, change) {
 
     // check if previous contributions have already with these goods
     let afterContribution = client.memory["contributors"][contributor.id][goods] ? client.memory["contributors"][contributor.id][goods] + change : change;
+    console.log(afterContribution);
   
     client.memory["contributors"][contributor.id][goods] = afterContribution;
 
@@ -255,7 +261,7 @@ function updateInventory(contributor, goods, change) {
 
 // gets the ranking of a person for a certain goods
 function getRanking(id, goods) {
-    leaderBoard = getLeaderBoard(goods)
+    let leaderBoard = getLeaderBoard(goods);
     for (let rank = 1; rank <= leaderBoard.length; rank++) {
         if (leaderBoard[rank - 1].id == id)
             return { rank: rank, goods: leaderBoard[rank - 1].goods };

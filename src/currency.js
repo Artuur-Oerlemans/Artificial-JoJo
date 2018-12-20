@@ -98,5 +98,4 @@ Currency.allCurrencies = [
     new Currency(["🚓", "🚔", "👮"], "There is no problem here.", -100)
 ];
 
-
-module.exports = Currency;
+export default Currency;

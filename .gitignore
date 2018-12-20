@@ -1,3 +1,5 @@
 node_modules/
+dist/
 .vs/
 token.json
+package-lock.json

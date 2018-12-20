@@ -1,6 +1,7 @@
 const token = require("./token.json").token;
 ﻿import * as discord from "discord.js";
 import Currency from "./currency";
+import Stand from "./stand";
 import shoutOra from "./shoutOra";
 import * as fs from "fs";
 
@@ -58,6 +59,12 @@ function executeCommands(message) {
             break;
         case 'loaves_eaten':
             tellLoavesEaten(message.channel, args[0]);
+            break;
+        case 'stand_stats':
+
+            let cur = new Currency(["k"], "k", 5);
+            let stand = new Stand(message.author.id);
+            stand.tellStand(message.channel);
             break;
         case 'ora':
             shoutOra(message.channel, args[0]);

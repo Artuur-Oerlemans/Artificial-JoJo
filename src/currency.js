@@ -94,7 +94,10 @@ Currency.allCurrencies = [
     new Currency(["💅"], "How do I say this, I got a...", 0),
     new Currency(["👌", "🖐", "🤚", "✋", "🖖", "🖕", "🤞", "🤙"], "**ザ・ハンド**", -1),
     //25 emojis
-    new Currency(["🔫"], "*Buys some salami to feed the bullets*\nThey all work so hard", -100),
+    new Currency(["🔫"], "*Buys some salami to feed the bullets*\nThey all work so hard", -123),
+    new Currency(["🏹"]
+        , "*the arrow strikes you in the knee*\n𝖙𝖍𝖎𝖘 𝖘𝖔𝖚𝖑...\n𝖉𝖎𝖉 𝖓𝖔𝖙 𝖇𝖊𝖑𝖔𝖓𝖌 𝖙𝖔 𝖔𝖓𝖊 𝖜𝖍𝖔 𝖘𝖍𝖔𝖚𝖑𝖉 𝖇𝖊 𝖈𝖍𝖔𝖘𝖊𝖓.\n*you die*\n*Artificial JoJo takes your wallet*"
+        , 1936),
     new Currency(["🚓", "🚔", "👮"], "There is no problem here.", -100)
 ];
 

@@ -31,7 +31,7 @@
 
 // collection of all possible currencies.
 Currency.allCurrencies = [
-    new Currency(["🦋"], "*Nanako's wallet just became a bit lighter*\nYou can't let your guard down in this server.", 10000),
+    new Currency(["🦋"], "*Nanako's wallet just became a bit lighter*\nYou can't let your guard down in this server.", 11012),
     new Currency(["🤑"], "*three bubbles approach*", 5106),
     new Currency(["💷"], "The value of 1 pound is 3097 lire", 3097),
     new Currency(["💶"], "The value of 1 euro is 1936 lire", 1936),
@@ -98,7 +98,7 @@ Currency.allCurrencies = [
     new Currency(["🏹"]
         , "*the arrow strikes you in the knee*\n𝖙𝖍𝖎𝖘 𝖘𝖔𝖚𝖑...\n𝖉𝖎𝖉 𝖓𝖔𝖙 𝖇𝖊𝖑𝖔𝖓𝖌 𝖙𝖔 𝖔𝖓𝖊 𝖜𝖍𝖔 𝖘𝖍𝖔𝖚𝖑𝖉 𝖇𝖊 𝖈𝖍𝖔𝖘𝖊𝖓.\n*you die*\n*Artificial JoJo takes your wallet*"
         , 1936),
-    new Currency(["🚓", "🚔", "👮"], "There is no problem here.", -100)
+    new Currency(["🚓", "🚔", "👮"], "There is no problem here.", -112)
 ];
 
 export default Currency;

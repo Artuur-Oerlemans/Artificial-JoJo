@@ -3,6 +3,8 @@ const token = require("./token.json").token;
 import Currency from "./currency";
 import Stand from "./stand";
 import shoutOra from "./shoutOra";
+import makeMeme from "./memeMaker";
+import makeChristmas from "./christmasMaker";
 import * as fs from "fs";
 
 var client = new discord.Client();
@@ -60,9 +62,7 @@ function executeCommands(message) {
         case 'loaves_eaten':
             tellLoavesEaten(message.channel, args[0]);
             break;
-        case 'stand_stats':
-
-            let cur = new Currency(["k"], "k", 5);
+        case 'my_stand':
             let stand = new Stand(message.author.id);
             stand.tellStand(message.channel);
             break;
@@ -77,6 +77,12 @@ function executeCommands(message) {
             break;
         case "countdown":
             showCountdownNextEpisode(message.channel);
+            break;
+        case "taste_of_a":
+            makeMeme(message);
+            break;
+        case "taste_of_christmas":
+            makeChristmas(message);
             break;
     }
     executeDonations(message);
@@ -102,15 +108,17 @@ function showIntroduction(channel) {
 }
 
 function showHelp(channel) {
-    embed = new discord.RichEmbed();
+    let embed = new discord.RichEmbed();
     embed.setColor("FF5733");
     embed.setThumbnail("https://vignette.wikia.nocookie.net/jjba/images/a/ab/Joseph-oh-my-god.jpg/revision/latest?cb=20140807173126");
 
     embed.addField(";progress", "Show how far I'm at becoming a gang-star");
     embed.addField(";introduce", "I, Artificial JoJo, will give a short introduction to my golden dream.");
+    embed.addField(";my_stand", "Find out what your stand is.");
     embed.addField(";loaves_eaten", "Give how old you are and it calculates how many loaves you have eaten.");
     embed.addField(";ora", "Give the amount of times you want ora");
     embed.addField(";countdown", "Tells how long until the next episode.");
+    embed.addField(";taste_of_a", "What is this I'm tasting?\nExample: ;taste_of_a @user liar!");
     embed.addField("contribute!", "In order to fullfil my dream of become a gang-star I need doekoe.\nMention me with any form of money to help me.")
 
     channel.send(embed);
@@ -118,7 +126,7 @@ function showHelp(channel) {
 
 function showCountdownNextEpisode(channel) {
     let now = new Date();
-    let nextEpisodeDate = getNextDate(5, 20);
+    let nextEpisodeDate = getNextDate(5, 19);
     channel.send(differenceDatesDHHMMSS(now, nextEpisodeDate)
         + " until the next episode of JoJo's bizarre adventure part 5: Golden Wind.");
 }
@@ -135,7 +143,7 @@ function getNextDate(day, hour) {
         nextTime.setDate(nextTime.getDate() + 7);
     }
     // set to the correct hour
-    nextTime.setHours(20);
+    nextTime.setHours(hour);
     nextTime.setMinutes(0);
     nextTime.setSeconds(0);
 
@@ -154,7 +162,7 @@ function differenceDatesDHHMMSS(date1, date2) {
     let seconds = Math.floor((differenceMilliseconds / oneSecond) % 1000);
     let minutes = Math.floor((differenceMilliseconds / oneMinute) % 60);
     let hours = Math.floor((differenceMilliseconds / oneHour) % 24);
-    let days = Math.floor(differenceMilliseconds / oneDay);
+    let days = Math.floor(differenceMilliseconds / oneDay)+7;
 
     if (days == 1) {
         output += days + " day and "
@@ -189,8 +197,6 @@ function showProgress(channel) {
 
 // check for donations
 function executeDonations(message) {
-    console.log(message.content);
-
     let currency = Currency.detectCurrency(message.content);
     if (currency == null) return;
 
@@ -245,23 +251,25 @@ function updateInventory(contributor, goods, change) {
     let inBank = client.memory["inventory"][goods];
     let afterTransfer = inBank + change;
     client.memory["inventory"][goods] = afterTransfer;
-    console.log(afterTransfer);
     // register the contribution
     let displayName = contributor.lastMessage.member.displayName;
-
-    // check if the user is already in the database
-    if (!client.memory["contributors"][contributor.id])
+    console.log(displayName);
+    // check if the user is already in the database or update display name
+    if (!client.memory["contributors"][contributor.id]) {
         client.memory["contributors"][contributor.id] = { displayName: displayName };
+    } else {
+        client.memory["contributors"][contributor.id]["displayName"] = displayName;
+    }
 
     // check if previous contributions have already with these goods
     let afterContribution = client.memory["contributors"][contributor.id][goods] ? client.memory["contributors"][contributor.id][goods] + change : change;
-    console.log(afterContribution);
   
     client.memory["contributors"][contributor.id][goods] = afterContribution;
 
     // sync to memory.json
-    fs.writeFile("./memory.json", JSON.stringify(client.memory, null, 4), err => {
+    fs.writeFile("./src/memory.json", JSON.stringify(client.memory, null, 4), err => {
         if (err) throw err;
+        console.log(JSON.stringify(client.memory, null, 4));
     });
     return afterTransfer;
 }

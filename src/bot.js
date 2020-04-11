@@ -8,6 +8,7 @@ import garfield from "./garfield";
 import makeMeme from "./memeMaker";
 import makeChristmas from "./christmasMaker";
 import * as fs from "fs";
+import LoavesEaten from "./features/LoavesEaten.js";
 
 var client = new discord.Client();
 client.memory = require("./memory.json");

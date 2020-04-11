@@ -3,31 +3,32 @@
 // but it's still good practice to act like it does
 class AbstractCommand {
 
-    private const commandWord = "AbstractCommand"
-
-    public shouldCommandBeActivated(messageContent) {
+    static shouldCommandBeActivated(messageContent) {
         var args = messageContent.split(' ');
         var firstWord = args[0];
 
         // now the first args will be the thing following the command
-        return firstWord == this.commandWord;
+        return firstWord == this.commandWord();
     }
 
-    public activateCommand(message) {
+    // javascript won't allow normal class variables
+    static commandWord() { return "abstract_command";}
+
+    static activateCommand(message) {
         throw "Command action not implemented for inherriting class";
 
     }
 
-    public usageDescription() {
+    static usageDescription() {
         throw "usage description not implemented for inherriting class";
 
         return ";somethingSomething";
     }
 
-    public commandDescription() {
+    static commandDescription() {
         throw "Command description not implemented for inherriting class";
 
-        return "you can use this to do something"
+		return "you can use this to do something";
     }
 
 }

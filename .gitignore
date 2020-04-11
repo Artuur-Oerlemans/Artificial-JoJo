@@ -3,3 +3,8 @@ dist/
 .vs/
 token.json
 package-lock.json
+temp/resultWithText.png
+temp/resultPersonDescription.png
+temp/resultGM2.png
+temp/backAndFront.png
+temp/greyFace.png

@@ -3,6 +3,8 @@ const token = require("./token.json").token;
 import Currency from "./currency";
 import Stand from "./stand";
 import shoutOra from "./shoutOra";
+import improveName from "./improveName";
+import garfield from "./garfield";
 import makeMeme from "./memeMaker";
 import makeChristmas from "./christmasMaker";
 import * as fs from "fs";
@@ -75,6 +77,12 @@ function executeCommands(message) {
         case "progress":
             showProgress(message.channel);
             break;
+        case "improve_name":
+            improveName(message);
+            break;
+        case "garfield":
+            garfield(message);
+            break;
         case "countdown":
             showCountdownNextEpisode(message.channel);
             break;
@@ -112,14 +120,14 @@ function showHelp(channel) {
     embed.setColor("FF5733");
     embed.setThumbnail("https://vignette.wikia.nocookie.net/jjba/images/a/ab/Joseph-oh-my-god.jpg/revision/latest?cb=20140807173126");
 
-    embed.addField(";progress", "Show how far I'm at becoming a gang-star");
-    embed.addField(";introduce", "I, Artificial JoJo, will give a short introduction to my golden dream.");
+    embed.addField(";progress", "Shows how far I'm to becoming a gang-star");
+    embed.addField(";introduce", "I, Artificial JoJo, will give a short introduction to my dream.");
     embed.addField(";my_stand", "Find out what your stand is.");
-    embed.addField(";loaves_eaten", "Give how old you are and it calculates how many loaves you have eaten.");
-    embed.addField(";ora", "Give the amount of times you want ora");
+    embed.addField(";loaves_eaten", "Tell how old you are and it calculates how many loaves you have approximately eaten.");
+    embed.addField(";ora", "Tell the amount of times you want ora");
     embed.addField(";countdown", "Tells how long until the next episode.");
     embed.addField(";taste_of_a", "What is this I'm tasting?\nExample: ;taste_of_a @user liar!");
-    embed.addField("contribute!", "In order to fullfil my dream of become a gang-star I need doekoe.\nMention me with any form of money to help me.")
+    embed.addField("contribute!", "In order to fullfil my dream of become a gang-star I need doekoe.\nTo help, mention me with any form of money.")
 
     channel.send(embed);
 }
@@ -127,8 +135,9 @@ function showHelp(channel) {
 function showCountdownNextEpisode(channel) {
     let now = new Date();
     let nextEpisodeDate = getNextDate(5, 19);
-    channel.send(differenceDatesDHHMMSS(now, nextEpisodeDate)
-        + " until the next episode of JoJo's bizarre adventure part 5: Golden Wind.");
+    channel.send("NEVER\nGo read the manga!");
+    //channel.send(differenceDatesDHHMMSS(now, nextEpisodeDate)
+    //    + " until the next episode of JoJo's bizarre adventure part 5: Golden Wind.");
 }
 
 // gets the next time that it is that day and hour. 
@@ -162,7 +171,7 @@ function differenceDatesDHHMMSS(date1, date2) {
     let seconds = Math.floor((differenceMilliseconds / oneSecond) % 1000);
     let minutes = Math.floor((differenceMilliseconds / oneMinute) % 60);
     let hours = Math.floor((differenceMilliseconds / oneHour) % 24);
-    let days = Math.floor(differenceMilliseconds / oneDay)+7;
+    let days = Math.floor(differenceMilliseconds / oneDay);
 
     if (days == 1) {
         output += days + " day and "

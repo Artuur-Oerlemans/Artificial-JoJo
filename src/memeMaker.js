@@ -16,9 +16,9 @@ function makeMeme(message) {
 	}
 	statement = arg.join(" ");
 	let faceURL = subject.user.displayAvatarURL;
-	displayName = reduceWidthByUsingMultipleLines(subject.displayName);
-	channel = message.channel;
-
+    displayName = reduceWidthByUsingMultipleLines(subject.displayName);
+    channel = message.channel;
+    console.log(faceURL);
 	extractFaceAndMakeGrey(faceURL)
 }
 

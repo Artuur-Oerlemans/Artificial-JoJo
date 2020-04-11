@@ -1,6 +1,6 @@
 {
     "inventory": {
-        "lires": 272766
+        "lires": 312426
     },
     "contributors": {
         "12345": {
@@ -11,20 +11,20 @@
             "lires": 1
         },
         "163668657740709889": {
-            "displayName": "Josletje Joestar",
-            "lires": 88209
+            "displayName": "koerlo",
+            "lires": 96728
         },
         "94177486702641152": {
-            "displayName": "why did I name my son sletje",
-            "lires": 92460
+            "displayName": "pimp nanako",
+            "lires": 103473
         },
         "157929537215266818": {
             "displayName": "Tom2",
             "lires": 5106
         },
         "126729045697232896": {
-            "displayName": "EXTREMELY cute cat",
-            "lires": 22148
+            "displayName": "BlockOwo",
+            "lires": 30658
         },
         "228449672157593601": {
             "displayName": "RomyNomy",
@@ -33,6 +33,10 @@
         "347742051854450690": {
             "displayName": "GrabantBrabant",
             "lires": 1936
+        },
+        "273883895588454400": {
+            "displayName": "Steen",
+            "lires": 11618
         }
     }
 }

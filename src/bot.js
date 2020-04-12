@@ -4,7 +4,7 @@ import Service from "./service/Service.js";
 
 var client = new discord.Client();
 var service = new Service();
-client.memory = require("./memory.json");
+
 
 client.login(token)
     .then((e) => { //Handle promises, unhandled promises will be deprecated soon.

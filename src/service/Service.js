@@ -8,6 +8,7 @@ import makeMeme from "../memeMaker";
 import makeChristmas from "../christmasMaker";
 import * as fs from "fs";
 import LoavesEatenCommand from "../commands/LoavesEatenCommand";
+import IntroductionCommand from "../commands/IntroductionCommand";
 
 //the thing that should be infront of commands
 const prefix = ";"
@@ -18,15 +19,14 @@ class Service{
 
 	executeCommands(message) {
 		var args = message.content.substring(prefix.length).split(' ');
-		var cmd = args[0];
+		var command = args[0];
 
 		// now the first args will be the thing following the command
 		args = args.splice(1);
     
-		switch (cmd) {
-
+		switch (command) {
 			case 'introduce':
-				this.showIntroduction(message.channel);
+				IntroductionCommand.activateCommand(message);
 				break;
 			case 'loaves_eaten':
 				LoavesEatenCommand.activateCommand(message);
@@ -60,6 +60,7 @@ class Service{
 				makeChristmas(message);
 				break;
 		}
+		
 		this.executeDonations(message);
 	}
 

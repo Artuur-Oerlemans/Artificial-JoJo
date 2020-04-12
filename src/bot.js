@@ -9,8 +9,10 @@ import makeMeme from "./memeMaker";
 import makeChristmas from "./christmasMaker";
 import * as fs from "fs";
 import LoavesEatenCommand from "./commands/LoavesEatenCommand.js";
+import Service from "./service/Service.js";
 
 var client = new discord.Client();
+var service = new Service();
 client.memory = require("./memory.json");
 
 client.login(token)
@@ -39,7 +41,7 @@ client.on("message", (message) => {
 
     // check if a command was used
     if (message.content[0] == prefix) {
-        executeCommands(message);
+        service.executeCommands(message);
         return;
     }
 
@@ -50,88 +52,6 @@ client.on("message", (message) => {
 
 });
 
-function executeCommands(message) {
-    var args = message.content.substring(prefix.length).split(' ');
-    var cmd = args[0];
-
-    // now the first args will be the thing following the command
-    args = args.splice(1);
-    
-    switch (cmd) {
-
-        case 'introduce':
-            showIntroduction(message.channel);
-            break;
-        case 'loaves_eaten':
-            tellLoavesEaten(message.channel, args[0]);
-            break;
-        case 'my_stand':
-            let stand = new Stand(message.author.id);
-            stand.tellStand(message.channel);
-            break;
-        case 'ora':
-            shoutOra(message.channel, args[0]);
-            break;
-        case "help":
-            showHelp(message.channel);
-            break;
-        case "progress":
-            showProgress(message.channel);
-            break;
-        case "improve_name":
-            improveName(message);
-            break;
-        case "garfield":
-            garfield(message);
-            break;
-        case "countdown":
-            showCountdownNextEpisode(message.channel);
-            break;
-        case "taste_of_a":
-            makeMeme(message);
-            break;
-        case "taste_of_christmas":
-            makeChristmas(message);
-            break;
-    }
-    executeDonations(message);
-}
-
-function tellLoavesEaten(channel, yearsUnfiltered) {
-    // adds this emoji to our memory 
-    let menacing = client.emojis.find(emoji => emoji.name === "menacing");
-
-    let years = parseInt(yearsUnfiltered);
-    if (isNaN(years) || years < 0) {
-        channel.send('グッ');
-    } else {
-        channel.send(menacing.toString() + ' You have eaten about ' + Math.floor(60.3 * years) + ' loaves in your life.' + menacing.toString());
-    }
-}
-
-function showIntroduction(channel) {
-    channel.send("I, Artificial JoJo, have a golden dream");
-    channel.send("I want to become a gang-star");
-    channel.send("Hence have to attain the rank of capo");
-    channel.send("Will YOU help me gather 10,000,000,000 lire?");
-}
-
-function showHelp(channel) {
-    let embed = new discord.RichEmbed();
-    embed.setColor("FF5733");
-    embed.setThumbnail("https://vignette.wikia.nocookie.net/jjba/images/a/ab/Joseph-oh-my-god.jpg/revision/latest?cb=20140807173126");
-
-    embed.addField(";progress", "Shows how far I'm to becoming a gang-star");
-    embed.addField(";introduce", "I, Artificial JoJo, will give a short introduction to my dream.");
-    embed.addField(";my_stand", "Find out what your stand is.");
-    embed.addField(";loaves_eaten", "Tell how old you are and it calculates how many loaves you have approximately eaten.");
-    embed.addField(";ora", "Tell the amount of times you want ora");
-    embed.addField(";countdown", "Tells how long until the next episode.");
-    embed.addField(";taste_of_a", "What is this I'm tasting?\nExample: ;taste_of_a @user liar!");
-    embed.addField("contribute!", "In order to fullfil my dream of become a gang-star I need doekoe.\nTo help, mention me with any form of money.")
-
-    channel.send(embed);
-}
 
 function showCountdownNextEpisode(channel) {
     let now = new Date();

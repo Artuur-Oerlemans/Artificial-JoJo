@@ -5,7 +5,6 @@ import Service from "./service/Service.js";
 var client = new discord.Client();
 var service = new Service();
 
-
 client.login(token)
     .then((e) => { //Handle promises, unhandled promises will be deprecated soon.
         console.log("Discord logged in!");
@@ -24,21 +23,31 @@ const prefix = ";"
 
 client.on('error', console.error);
 
-// what to do when a message is received
+// message receiver
 client.on("message", (message) => {
-
-    // make certain the bot doesn't fall into a loop with another bot.
-    if (message.author.bot) return;
+	
+	if (isFromBot(message)) return;
 
     // check if a command was used
-    if (message.content[0] == prefix) {
+	if (wasCommandUsed(message)) {
         service.executeCommands(message);
         return;
     }
 
-    // respond to personal things
-    if (message.mentions.users.array().length == 1 && message.mentions.users.first().id == 518344287554109450) {
+	if (wasMentioned(message)) {
         service.executeDonations(message);
     }
 
 });
+
+function isFromBot(message) {
+	return message.author.bot;
+}
+
+function wasCommandUsed(message) {
+	return message.content[0] == prefix;
+}
+
+function wasMentioned(message) {
+	return message.mentions.users.array().length == 1 && message.mentions.users.first().id == 518344287554109450;
+}

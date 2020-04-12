@@ -12,6 +12,8 @@ import LoavesEatenCommand from "../commands/LoavesEatenCommand";
 //the thing that should be infront of commands
 const prefix = ";"
 
+let memory = require("../memory.json");
+
 class Service{
 
 	executeCommands(message) {
@@ -40,7 +42,7 @@ class Service{
 				this.showHelp(message.channel);
 				break;
 			case "progress":
-				this.showProgress(message.channel, message.client.memory);
+				this.showProgress(message.channel);
 				break;
 			case "improve_name":
 				improveName(message);
@@ -139,9 +141,9 @@ class Service{
 		return ('0' + number).slice(-2);
 	}
 
-	showProgress(channel, memory) {
+	showProgress(channel) {
 		let progress = memory["inventory"].lires;
-		let leaderBoard = this.getLeaderBoard("lires", memory)
+		let leaderBoard = this.getLeaderBoard("lires")
 		let embed = new discord.RichEmbed();
 
 		embed.setColor("FF5733");
@@ -163,25 +165,25 @@ class Service{
 		if (currency.valueInLires > 0)
 			message.channel.send(this.thankYouMessage(message.author));
 		message.channel.send(currency.description);
-		this.receiveDonation(message.author, message.channel, currency.valueInLires, message.client.memory);
+		this.receiveDonation(message.author, message.channel, currency.valueInLires);
 
 
 	}
 
 	// Donate lires
-	receiveDonation(contributor, channel, change, memory) {
+	receiveDonation(contributor, channel, change) {
 		let inBank = memory["inventory"].lires;
 		let afterTransfer = inBank;
 		if (change != 0) {
-			afterTransfer = this.updateInventory(contributor, "lires", change, memory);
+			afterTransfer = this.updateInventory(contributor, "lires", change);
 		}
 
 		channel.send(inBank + " lire => " + afterTransfer + " lire");
-		this.tellRanking(channel, "lires", contributor, memory);
+		this.tellRanking(channel, "lires", contributor);
 	}
 
-	tellRanking(channel, goods, contributor, memory) {
-		let ranking = this.getRanking(contributor.id, goods, memory);
+	tellRanking(channel, goods, contributor) {
+		let ranking = this.getRanking(contributor.id, goods);
 		channel.send("ranking: " + ranking.rank);
 	}
 
@@ -206,7 +208,7 @@ class Service{
 	}
 
 	// change the quantity of a certain goods in the JSON file.
-	updateInventory(contributor, goods, change, memory) {
+	updateInventory(contributor, goods, change) {
 		// update the inventory value
 		let inBank = memory["inventory"][goods];
 		let afterTransfer = inBank + change;
@@ -235,8 +237,8 @@ class Service{
 	}
 
 	// gets the ranking of a person for a certain goods
-	getRanking(id, goods, memory) {
-		let leaderBoard = this.getLeaderBoard(goods, memory);
+	getRanking(id, goods) {
+		let leaderBoard = this.getLeaderBoard(goods);
 		for (let rank = 1; rank <= leaderBoard.length; rank++) {
 			if (leaderBoard[rank - 1].id == id)
 				return { rank: rank, goods: leaderBoard[rank - 1].goods };
@@ -245,7 +247,7 @@ class Service{
 	}
 
 	// return leaderboard with format: id, displayName and [goods]
-	getLeaderBoard(goods, memory) {
+	getLeaderBoard(goods) {
 		let contributors = memory["contributors"];
 
 		let leaderBoard = Object.keys(contributors).map(function (key) {

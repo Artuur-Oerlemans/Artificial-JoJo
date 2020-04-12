@@ -1,14 +1,5 @@
 const token = require("./token.json").token;
 ﻿import * as discord from "discord.js";
-import Currency from "./currency";
-import Stand from "./stand";
-import shoutOra from "./shoutOra";
-import improveName from "./improveName";
-import garfield from "./garfield";
-import makeMeme from "./memeMaker";
-import makeChristmas from "./christmasMaker";
-import * as fs from "fs";
-import LoavesEatenCommand from "./commands/LoavesEatenCommand.js";
 import Service from "./service/Service.js";
 
 var client = new discord.Client();

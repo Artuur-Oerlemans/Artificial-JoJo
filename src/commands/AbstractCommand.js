@@ -22,7 +22,7 @@ class AbstractCommand {
     static usageDescription() {
         throw "usage description not implemented for inherriting class";
 
-        return ";somethingSomething";
+        return commandWord() + " {fill in}";
     }
 
     static commandDescription() {

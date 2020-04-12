@@ -35,7 +35,7 @@ client.on("message", (message) => {
     }
 
 	if (wasMentioned(message)) {
-        service.executeDonations(message);
+		service.personalInteraction(message);
     }
 
 });

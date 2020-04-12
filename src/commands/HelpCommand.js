@@ -2,8 +2,7 @@ import AbstractCommand from "./AbstractCommand";
 import * as discord from "discord.js";
 
 class HelpCommand extends AbstractCommand {
-
-	// javascript won't allow normal class variables
+	
 	static commandWord() { return "help"; }
 
 	static activateCommand(message) {

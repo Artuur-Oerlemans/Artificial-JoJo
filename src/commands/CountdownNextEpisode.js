@@ -2,7 +2,7 @@ import AbstractCommand from "./AbstractCommand";
 
 class CountdownNextEpisode extends AbstractCommand {
 
-	static commandWord() { return "countdown"; }
+	commandWord() { return "countdown"; }
 
 	static usageDescription() {
 		return commandWord();
@@ -12,7 +12,7 @@ class CountdownNextEpisode extends AbstractCommand {
 		return "Tells how long until the next episode.";
 	}
 
-	static activateCommand(message) {
+	activateCommand(message) {
 		let channel = message.channel;
 		
 		let now = new Date();
@@ -26,7 +26,7 @@ class CountdownNextEpisode extends AbstractCommand {
 	
 	// gets the next time that it is that day and hour. 
 	// Sunday = 0
-	static getNextDate(day, hour) {
+	getNextDate(day, hour) {
 		let now = new Date();
 		let nextTime = new Date();
 		//go to correct day of the week
@@ -43,7 +43,7 @@ class CountdownNextEpisode extends AbstractCommand {
 		return nextTime;
 	}
 
-	static differenceDatesDHHMMSS(date1, date2) {
+	differenceDatesDHHMMSS(date1, date2) {
 		let output = "";
 		let differenceMilliseconds = date2.getTime() - date1.getTime();
 
@@ -66,7 +66,7 @@ class CountdownNextEpisode extends AbstractCommand {
 		return output;
 	}
 
-	static twoDigits(number) {
+	twoDigits(number) {
 		return ('0' + number).slice(-2);
 	}
 }

@@ -3,9 +3,9 @@ import * as discord from "discord.js";
 
 class ShowProgress extends AbstractCommand {
 
-	static commandWord() { return "progress"; }
+	commandWord() { return "progress"; }
 
-	static activateCommand(message, donations) {
+	activateCommand(message, donations) {
 		let channel = message.channel;
 		let progress = donations.moneyInBank();
 		let leaderBoard = donations.getLeaderBoard("lires")

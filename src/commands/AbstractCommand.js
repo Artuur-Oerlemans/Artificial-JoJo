@@ -3,7 +3,7 @@
 // but it's still good practice to act like it does
 class AbstractCommand {
 
-    static shouldCommandBeActivated(messageContent) {
+    shouldCommandBeActivated(messageContent) {
         var args = messageContent.split(' ');
         var firstWord = args[0];
 
@@ -12,9 +12,9 @@ class AbstractCommand {
     }
 
     // javascript won't allow normal class variables
-    static commandWord() { return "abstract_command";}
+    commandWord() { return "abstract_command";}
 
-    static activateCommand(message) {
+    activateCommand(message) {
         throw "Command action not implemented for inherriting class";
 
     }

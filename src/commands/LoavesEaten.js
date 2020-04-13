@@ -1,9 +1,9 @@
 ﻿import AbstractCommand from "./AbstractCommand.js"
 
 class LoavesEaten extends AbstractCommand {
-	static commandWord() { return "loaves_eaten"; }
+	commandWord() { return "loaves_eaten"; }
 
-	static activateCommand(message) {
+	activateCommand(message) {
 		let channel = message.channel;
 		let yearsUnfiltered = message.content.split(' ')[1];
 		// adds this emoji to our memory 

@@ -3,9 +3,9 @@ import AbstractCommand from "./AbstractCommand";
 class Introduction extends AbstractCommand {
 
 	// javascript won't allow normal class variables
-	static commandWord() { return "introduce"; }
+	commandWord() { return "introduce"; }
 
-	static activateCommand(message) {
+	activateCommand(message) {
 		let channel = message.channel;
 
 		channel.send("I, Artificial JoJo, have a dream!");

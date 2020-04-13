@@ -3,9 +3,9 @@ import * as discord from "discord.js";
 
 class Help extends AbstractCommand {
 	
-	static commandWord() { return "help"; }
+	commandWord() { return "help"; }
 
-	static activateCommand(message) {
+	activateCommand(message) {
 		let channel = message.channel;
 		let embed = new discord.RichEmbed();
 
@@ -24,11 +24,11 @@ class Help extends AbstractCommand {
 		channel.send(embed);
 	}
 
-	static usageDescription() {
+	usageDescription() {
 		return commandWord();
 	}
 
-	static commandDescription() {
+	commandDescription() {
 		return "The command you used to get this text.";
 	}
 }

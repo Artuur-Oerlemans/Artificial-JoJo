@@ -28,6 +28,10 @@ class Service{
 	}
 
 	executeCommands(message) {
+		this.commands.filter(command => command.shouldCommandBeActivated(message.content))
+			.forEach(command => command.activateCommand(message));
+
+
 		var args = message.content.split(' ');
 		var command = args[0];
 
@@ -35,12 +39,6 @@ class Service{
 		args = args.splice(1);
     
 		switch (command) {
-			case 'introduce':
-				Introduction.activateCommand(message);
-				break;
-			case 'loaves_eaten':
-				LoavesEaten.activateCommand(message);
-				break;
 			case 'my_stand':
 				let stand = new Stand(message.author.id);
 				stand.tellStand(message.channel);
@@ -48,20 +46,11 @@ class Service{
 			case 'ora':
 				shoutOra(message.channel, args[0]);
 				break;
-			case "help":
-				Help.activateCommand(message);
-				break;
-			case "progress":
-				ShowProgress.activateCommand(message, donations);
-				break;
 			case "improve_name":
 				improveName(message);
 				break;
 			case "garfield":
 				garfield(message);
-				break;
-			case "countdown":
-				CountdownNextEpisode.activateCommand(message);
 				break;
 			case "taste_of_a":
 				makeMeme(message);

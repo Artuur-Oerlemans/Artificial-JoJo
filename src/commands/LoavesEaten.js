@@ -1,6 +1,6 @@
 ﻿import AbstractCommand from "./AbstractCommand.js"
 
-class LoavesEatenCommand extends AbstractCommand {
+class LoavesEaten extends AbstractCommand {
 	static commandWord() { return "loaves_eaten"; }
 
 	static activateCommand(message) {
@@ -26,4 +26,4 @@ class LoavesEatenCommand extends AbstractCommand {
 	}
 }
 
-export default LoavesEatenCommand;
+export default LoavesEaten;

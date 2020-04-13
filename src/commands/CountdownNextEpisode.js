@@ -1,6 +1,6 @@
 import AbstractCommand from "./AbstractCommand";
 
-class CountdownNextEpisodeCommand extends AbstractCommand {
+class CountdownNextEpisode extends AbstractCommand {
 
 	static commandWord() { return "countdown"; }
 
@@ -71,4 +71,4 @@ class CountdownNextEpisodeCommand extends AbstractCommand {
 	}
 }
 
-export default CountdownNextEpisodeCommand;
+export default CountdownNextEpisode;

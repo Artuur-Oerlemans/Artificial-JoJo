@@ -1,7 +1,7 @@
 import AbstractCommand from "./AbstractCommand";
 import * as discord from "discord.js";
 
-class HelpCommand extends AbstractCommand {
+class Help extends AbstractCommand {
 	
 	static commandWord() { return "help"; }
 
@@ -33,4 +33,4 @@ class HelpCommand extends AbstractCommand {
 	}
 }
 
-export default HelpCommand;
+export default Help;

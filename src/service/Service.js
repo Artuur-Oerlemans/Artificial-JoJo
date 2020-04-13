@@ -7,11 +7,11 @@ import garfield from "../garfield";
 import makeMeme from "../memeMaker";
 import makeChristmas from "../christmasMaker";
 import * as fs from "fs";
-import LoavesEatenCommand from "../commands/LoavesEatenCommand";
-import IntroductionCommand from "../commands/IntroductionCommand";
-import HelpCommand from "../commands/HelpCommand";
-import CountdownNextEpisodeCommand from "../commands/CountdownNextEpisodeCommand";
-import ShowProgressCommand from "../commands/ShowProgressCommand";
+import LoavesEaten from "../commands/LoavesEaten";
+import Introduction from "../commands/Introduction";
+import Help from "../commands/Help";
+import CountdownNextEpisode from "../commands/CountdownNextEpisode";
+import ShowProgress from "../commands/ShowProgress";
 import Donations from "./Donations"
 
 //the thing that should be infront of commands
@@ -20,6 +20,10 @@ const prefix = ";";
 var donations = new Donations();
 
 class Service{
+
+	constructor(){
+		this.commands = [];
+	}
 
 	executeCommands(message) {
 		var args = message.content.substring(prefix.length).split(' ');
@@ -30,10 +34,10 @@ class Service{
     
 		switch (command) {
 			case 'introduce':
-				IntroductionCommand.activateCommand(message);
+				Introduction.activateCommand(message);
 				break;
 			case 'loaves_eaten':
-				LoavesEatenCommand.activateCommand(message);
+				LoavesEaten.activateCommand(message);
 				break;
 			case 'my_stand':
 				let stand = new Stand(message.author.id);
@@ -43,10 +47,10 @@ class Service{
 				shoutOra(message.channel, args[0]);
 				break;
 			case "help":
-				HelpCommand.activateCommand(message);
+				Help.activateCommand(message);
 				break;
 			case "progress":
-				ShowProgressCommand.activateCommand(message, donations);
+				ShowProgress.activateCommand(message, donations);
 				break;
 			case "improve_name":
 				improveName(message);
@@ -55,7 +59,7 @@ class Service{
 				garfield(message);
 				break;
 			case "countdown":
-				CountdownNextEpisodeCommand.activateCommand(message);
+				CountdownNextEpisode.activateCommand(message);
 				break;
 			case "taste_of_a":
 				makeMeme(message);

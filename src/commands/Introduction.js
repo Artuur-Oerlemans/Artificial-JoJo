@@ -1,6 +1,6 @@
 import AbstractCommand from "./AbstractCommand";
 
-class IntroductionCommand extends AbstractCommand {
+class Introduction extends AbstractCommand {
 
 	// javascript won't allow normal class variables
 	static commandWord() { return "introduce"; }
@@ -23,4 +23,4 @@ class IntroductionCommand extends AbstractCommand {
 	}
 }
 
-export default IntroductionCommand;
+export default Introduction;

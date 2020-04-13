@@ -1,7 +1,7 @@
 import AbstractCommand from "./AbstractCommand";
 import * as discord from "discord.js";
 
-class ShowProgressCommand extends AbstractCommand {
+class ShowProgress extends AbstractCommand {
 
 	static commandWord() { return "progress"; }
 
@@ -31,4 +31,4 @@ class ShowProgressCommand extends AbstractCommand {
 	}
 }
 
-export default ShowProgressCommand;
+export default ShowProgress;

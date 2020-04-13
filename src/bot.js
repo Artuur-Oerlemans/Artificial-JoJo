@@ -19,7 +19,7 @@ client.on("ready", () => {
 });
 
 //the thing that should be infront of commands
-const prefix = ";"
+const commandPrefix = ";"
 
 client.on('error', console.error);
 
@@ -28,8 +28,9 @@ client.on("message", (message) => {
 	
 	if (isFromBot(message)) return;
 
-    // check if a command was used
-	if (wasCommandUsed(message)) {
+	if (wasCommandPrefixUsed(message)) {
+
+		removePrefixFromMessage(message);
         service.executeCommands(message);
         return;
     }
@@ -44,8 +45,12 @@ function isFromBot(message) {
 	return message.author.bot;
 }
 
-function wasCommandUsed(message) {
-	return message.content[0] == prefix;
+function removePrefixFromMessage(message) {
+	message.content = message.content.substring(commandPrefix.length);
+}
+
+function wasCommandPrefixUsed(message) {
+	return message.content[0] == commandPrefix;
 }
 
 function wasMentioned(message) {

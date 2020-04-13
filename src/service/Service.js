@@ -14,19 +14,21 @@ import CountdownNextEpisode from "../commands/CountdownNextEpisode";
 import ShowProgress from "../commands/ShowProgress";
 import Donations from "./Donations"
 
-//the thing that should be infront of commands
-const prefix = ";";
-
 var donations = new Donations();
 
 class Service{
 
 	constructor(){
-		this.commands = [];
+		//TODO: apply IoD here.
+		this.commands = [	new LoavesEaten(),
+							new Introduction(),
+							new Help(),
+							new CountdownNextEpisode(),
+							new ShowProgress()];
 	}
 
 	executeCommands(message) {
-		var args = message.content.substring(prefix.length).split(' ');
+		var args = message.content.split(' ');
 		var command = args[0];
 
 		// now the first args will be the thing following the command

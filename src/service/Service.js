@@ -17,7 +17,6 @@ import Donations from "./Donations"
 //the thing that should be infront of commands
 const prefix = ";";
 
-let memory = require("../memory.json");
 var donations = new Donations();
 
 class Service{

@@ -20,16 +20,19 @@ class Service{
 
 	constructor(){
 		//TODO: apply IoD here.
-		this.commands = [	new LoavesEaten(),
-							new Introduction(),
-							new Help(),
-							new CountdownNextEpisode(),
-							new ShowProgress()];
+		this.commands = [
+			new LoavesEaten(),
+			new Introduction(),
+			new Help(),
+			new CountdownNextEpisode(),
+			new ShowProgress()
+		];
 	}
 
 	executeCommands(message) {
-		this.commands.filter(command => command.shouldCommandBeActivated(message.content))
-			.forEach(command => command.activateCommand(message));
+		this.commands
+			.filter(cmd => cmd.shouldCommandBeActivated(message.content))
+			.forEach(cmd => cmd.activateCommand(message));
 
 
 		var args = message.content.split(' ');

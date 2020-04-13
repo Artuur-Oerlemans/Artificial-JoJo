@@ -5,7 +5,6 @@ class ShowProgress extends AbstractCommand {
 
 	constructor(donations) {
 		super();
-		this.money = 5;
 		this.donations = donations;
 	}
 
@@ -28,11 +27,11 @@ class ShowProgress extends AbstractCommand {
 		channel.send(embed);
 	}
 
-	static usageDescription() {
-		return commandWord();
+	usageDescription() {
+		return this.commandWord();
 	}
 
-	static commandDescription() {
+	commandDescription() {
 		return "Shows how far I'm to becoming a gang-star/";
 	}
 }

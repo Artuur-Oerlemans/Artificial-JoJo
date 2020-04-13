@@ -4,11 +4,11 @@ class CountdownNextEpisode extends AbstractCommand {
 
 	commandWord() { return "countdown"; }
 
-	static usageDescription() {
-		return commandWord();
+	usageDescription() {
+		return this.commandWord();
 	}
 
-	static commandDescription() {
+	commandDescription() {
 		return "Tells how long until the next episode.";
 	}
 

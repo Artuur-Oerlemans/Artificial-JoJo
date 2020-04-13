@@ -14,11 +14,11 @@ class Introduction extends AbstractCommand {
 		channel.send("Will YOU help me gather 10,000,000,000 lire?");
 	}
 
-	static usageDescription() {
-		return commandWord();
+	usageDescription() {
+		return this.commandWord();
 	}
 
-	static commandDescription() {
+	commandDescription() {
 		return "I, Artificial JoJo, will give a short introduction to my dream.";
 	}
 }

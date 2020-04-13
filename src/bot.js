@@ -1,9 +1,13 @@
 const token = require("./token.json").token;
 ﻿import * as discord from "discord.js";
 import Service from "./service/Service.js";
+import Donations from "./service/Donations"
+import Commands from "./model/Commands"
 
+var donations = new Donations();
+var commands = new Commands(donations)
 var client = new discord.Client();
-var service = new Service();
+var service = new Service(commands, donations);
 
 client.login(token)
     .then((e) => { //Handle promises, unhandled promises will be deprecated soon.

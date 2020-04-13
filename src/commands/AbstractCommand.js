@@ -19,13 +19,13 @@ class AbstractCommand {
 
     }
 
-    static usageDescription() {
+    usageDescription() {
         throw "usage description not implemented for inherriting class";
 
-        return commandWord() + " {fill in}";
+        return this.commandWord() + " {fill in}";
     }
 
-    static commandDescription() {
+    commandDescription() {
         throw "Command description not implemented for inherriting class";
 
 		return "you can use this to do something";

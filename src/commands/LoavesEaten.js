@@ -17,11 +17,11 @@ class LoavesEaten extends AbstractCommand {
 		}
 	}
 
-	static usageDescription() {
-		return commandWord() + " {age in years}";
+	usageDescription() {
+		return this.commandWord() + " {age in years}";
 	}
 
-	static commandDescription() {
+	commandDescription() {
 		return "Calculates how many loaves you have approximately eaten.";
 	}
 }

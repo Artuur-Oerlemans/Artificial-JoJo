@@ -3,12 +3,18 @@ import * as discord from "discord.js";
 
 class ShowProgress extends AbstractCommand {
 
+	constructor(donations) {
+		super();
+		this.money = 5;
+		this.donations = donations;
+	}
+
 	commandWord() { return "progress"; }
 
-	activateCommand(message, donations) {
+	activateCommand(message) {
 		let channel = message.channel;
-		let progress = donations.moneyInBank();
-		let leaderBoard = donations.getLeaderBoard("lires")
+		let progress = this.donations.moneyInBank();
+		let leaderBoard = this.donations.getLeaderBoard("lires")
 		let embed = new discord.RichEmbed();
 
 		embed.setColor("FF5733");

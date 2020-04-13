@@ -25,7 +25,7 @@ class Service{
 			new Introduction(),
 			new Help(),
 			new CountdownNextEpisode(),
-			new ShowProgress()
+			new ShowProgress(donations)
 		];
 	}
 

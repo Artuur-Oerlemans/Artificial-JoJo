@@ -3,6 +3,7 @@ import Introduction from "../commands/Introduction";
 import Help from "../commands/Help";
 import CountdownNextEpisode from "../commands/CountdownNextEpisode";
 import ShowProgress from "../commands/ShowProgress";
+import Garfield from "../commands/Garfield";
 
 // goal of this class is to make the commands array somewhat of a singleton
 // (as far that is possible in javascript)
@@ -13,6 +14,7 @@ class Commands {
 			new Introduction(),
 			new LoavesEaten(),
 			new CountdownNextEpisode(),
+			new Garfield(),
 			new Help(this)
 		];
 	}

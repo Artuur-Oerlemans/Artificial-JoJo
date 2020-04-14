@@ -42,9 +42,6 @@ class Service{
 			case "improve_name":
 				improveName(message);
 				break;
-			case "garfield":
-				garfield(message);
-				break;
 			case "taste_of_a":
 				makeMeme(message);
 				break;

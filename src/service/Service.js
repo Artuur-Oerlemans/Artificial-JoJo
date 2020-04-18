@@ -13,11 +13,11 @@
 			.filter(cmd => cmd.shouldCommandBeActivated(message.content))
 			.forEach(cmd => cmd.activateCommand(message));
 		
-		this.donations.executeDonations(message);
+		this.donations.takeAnyDonations(message);
 	}
 
 	personalInteraction(message){
-		this.donations.executeDonations(message);
+		this.donations.takeAnyDonations(message);
 	}
 }
 

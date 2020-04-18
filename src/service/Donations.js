@@ -1,9 +1,15 @@
 import Currency from "../entities/Currency";
+import DonationRepository from "../repository/donationRepository"
 import * as fs from "fs";
 
 class Donations {
+
+	constructor() {
+		this.repository = new DonationRepository();
+	}
+
 	// check for donations
-	executeDonations(message) {
+	takeAnyDonations(message) {
 		let currency = Currency.detectCurrency(message.content);
 		if (currency == null) return;
 
@@ -28,7 +34,7 @@ class Donations {
 	}
 
 	moneyInBank() {
-		return Donations.memory["inventory"].lires;
+		return this.repository.memory["inventory"].lires;
 	}
 
 	tellRanking(channel, goods, contributor) {
@@ -59,28 +65,28 @@ class Donations {
 	// change the quantity of a certain goods in the JSON file.
 	updateInventory(contributor, goods, change) {
 		// update the inventory value
-		let inBank = Donations.memory["inventory"][goods];
+		let inBank = this.repository.memory["inventory"][goods];
 		let afterTransfer = inBank + change;
-		Donations.memory["inventory"][goods] = afterTransfer;
+		this.repository.memory["inventory"][goods] = afterTransfer;
 		// register the contribution
 		let displayName = contributor.lastMessage.member.displayName;
 		console.log(displayName);
 		// check if the user is already in the database or update display name
-		if (!Donations.memory["contributors"][contributor.id]) {
-			Donations.memory["contributors"][contributor.id] = { displayName: displayName };
+		if (!this.repository.memory["contributors"][contributor.id]) {
+			this.repository.memory["contributors"][contributor.id] = { displayName: displayName };
 		} else {
-			Donations.memory["contributors"][contributor.id]["displayName"] = displayName;
+			this.repository.memory["contributors"][contributor.id]["displayName"] = displayName;
 		}
 
 		// check if previous contributions have already with these goods
-		let afterContribution = Donations.memory["contributors"][contributor.id][goods] ? Donations.memory["contributors"][contributor.id][goods] + change : change;
+		let afterContribution = this.repository.memory["contributors"][contributor.id][goods] ? this.repository.memory["contributors"][contributor.id][goods] + change : change;
 
-		Donations.memory["contributors"][contributor.id][goods] = afterContribution;
+		this.repository.memory["contributors"][contributor.id][goods] = afterContribution;
 
 		// sync to memory.json
-		fs.writeFile("./src/memory.json", JSON.stringify(Donations.memory, null, 4), err => {
+		fs.writeFile("./src/memory.json", JSON.stringify(this.repository.memory, null, 4), err => {
 			if (err) throw err;
-			console.log(JSON.stringify(Donations.memory, null, 4));
+			console.log(JSON.stringify(this.repository.memory, null, 4));
 		});
 		return afterTransfer;
 	}
@@ -97,7 +103,7 @@ class Donations {
 
 	// return leaderboard with format: id, displayName and [goods]
 	getLeaderBoard(goods) {
-		let contributors = Donations.memory["contributors"];
+		let contributors = this.repository.memory["contributors"];
 
 		let leaderBoard = Object.keys(contributors).map(function (key) {
 			return { id: key, displayName: this[key].displayName, goods: this[key][goods] ? this[key][goods] : 0 };
@@ -107,7 +113,5 @@ class Donations {
 		return leaderBoard;
 	}
 }
-
-Donations.memory = require("../memory.json");
 
 export default Donations;

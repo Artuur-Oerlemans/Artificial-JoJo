@@ -1,4 +1,4 @@
-import Currency from "../Currency";
+import Currency from "../entities/Currency";
 import * as fs from "fs";
 
 class Donations {

@@ -50,7 +50,7 @@ class Donations {
 			, "*yEy!* Fine, Thank You!"
 			, "Arigatou gozaimasu"
 			, "GOURUDO EKUSUPERIENSU"
-			, "At this rate we will be at 10,000,000,000 lire in now time"];
+			, "At this rate we will be at 10,000,000,000 lire in no time"];
 		let random = Math.floor(Math.random() * responses.length);
 
 		return responses[random];

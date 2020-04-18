@@ -1,5 +1,7 @@
 import * as fs from "fs";
 
+var GOODS = "lires"
+
 class DonationRepository {
 	constructor() {
 		this.memory = require("../memory.json");
@@ -14,19 +16,19 @@ class DonationRepository {
 		let contributors = this.memory["contributors"];
 
 		let leaderBoard = Object.keys(contributors).map(function (key) {
-			return { id: key, displayName: this[key].displayName, goods: this[key]["lires"] ? this[key]["lires"] : 0 };
+			return { id: key, displayName: this[key].displayName, goods: this[key][GOODS] ? this[key][GOODS] : 0 };
 		}, contributors);
 		leaderBoard.sort(function (p1, p2) { return p2.goods - p1.goods; });
 
 		return leaderBoard;
 	}
 
-	// change the quantity of a certain goods in the JSON file.
-	updateInventory(contributor, goods, change) {
+	// change the quantity of GOODS in the JSON file.
+	updateInventory(contributor, change) {
 		// update the inventory value
-		let inBank = this.memory["inventory"][goods];
+		let inBank = this.memory["inventory"][GOODS];
 		let afterTransfer = inBank + change;
-		this.memory["inventory"][goods] = afterTransfer;
+		this.memory["inventory"][GOODS] = afterTransfer;
 		// register the contribution
 		let displayName = contributor.lastMessage.member.displayName;
 		console.log(displayName);
@@ -37,10 +39,10 @@ class DonationRepository {
 			this.memory["contributors"][contributor.id]["displayName"] = displayName;
 		}
 
-		// check if previous contributions have already with these goods
-		let afterContribution = this.memory["contributors"][contributor.id][goods] ? this.memory["contributors"][contributor.id][goods] + change : change;
+		// check if previous contributions have already with these GOODS
+		let afterContribution = this.memory["contributors"][contributor.id][GOODS] ? this.memory["contributors"][contributor.id][GOODS] + change : change;
 
-		this.memory["contributors"][contributor.id][goods] = afterContribution;
+		this.memory["contributors"][contributor.id][GOODS] = afterContribution;
 
 		// sync to memory.json
 		fs.writeFile("./src/memory.json", JSON.stringify(this.memory, null, 4), err => {

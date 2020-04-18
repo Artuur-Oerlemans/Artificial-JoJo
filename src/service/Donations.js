@@ -1,5 +1,4 @@
 import Currency from "../entities/Currency";
-import * as fs from "fs";
 
 class Donations {
 
@@ -23,14 +22,14 @@ class Donations {
 		let inBank = this.repository.moneyInBank()
 		let afterTransfer = inBank;
 		if (change != 0) {
-			afterTransfer = this.repository.updateInventory(contributor, "lires", change);
+			afterTransfer = this.repository.updateInventory(contributor, change);
 		}
 
 		channel.send(inBank + " lire => " + afterTransfer + " lire");
-		this.tellRanking(channel, "lires", contributor);
+		this.tellRanking(channel, contributor);
 	}
 
-	tellRanking(channel, goods, contributor) {
+	tellRanking(channel, contributor) {
 		let ranking = this.getRanking(contributor.id);
 		channel.send("ranking: " + ranking);
 	}

@@ -5,6 +5,7 @@ import CountdownNextEpisode from "../commands/CountdownNextEpisode";
 import ShowProgress from "../commands/ShowProgress";
 import Garfield from "../commands/Garfield";
 import ShoutOra from "../commands/ShoutOra";
+import GetStand from "../commands/GetStand";
 
 // goal of this class is to make the commands array somewhat of a singleton
 // (as far that is possible in javascript)
@@ -13,6 +14,7 @@ class Commands {
 		this.commands = [
 			new ShowProgress(donations),
 			new Introduction(),
+            new GetStand(),
 			new ShoutOra(),
 			new LoavesEaten(),
 			new CountdownNextEpisode(),

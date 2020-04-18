@@ -1,5 +1,4 @@
-﻿﻿import Stand from "../stand";
-import makeMeme from "../memeMaker";
+﻿﻿import makeMeme from "../memeMaker";
 import makeChristmas from "../christmasMaker";
 import Donations from "./Donations"
 
@@ -29,10 +28,6 @@ class Service{
 		args = args.splice(1);
     
 		switch (command) {
-			case 'my_stand':
-				let stand = new Stand(message.author.id);
-				stand.tellStand(message.channel);
-				break;
 			case "taste_of_a":
 				makeMeme(message);
 				break;

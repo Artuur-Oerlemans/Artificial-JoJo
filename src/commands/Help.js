@@ -21,7 +21,6 @@ class Help extends AbstractCommand {
 		commandsArray
 			.forEach(cmd => embed.addField(";" + cmd.usageDescription(), cmd.commandDescription()));
 		
-		embed.addField(";my_stand", "Find out what your stand is.");
 		embed.addField(";taste_of_a {@user} {liar!}", "What is this I'm tasting?\nExample: ;taste_of_a @user liar!");
 		embed.addField("contribute!", "In order to fullfil my dream of become a gang-star I need doekoe.\nTo help, mention me with any form of money.")
 

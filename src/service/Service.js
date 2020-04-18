@@ -1,6 +1,4 @@
 ﻿﻿import Stand from "../stand";
-import shoutOra from "../shoutOra";
-import improveName from "../improveName";
 import makeMeme from "../memeMaker";
 import makeChristmas from "../christmasMaker";
 import Donations from "./Donations"
@@ -34,9 +32,6 @@ class Service{
 			case 'my_stand':
 				let stand = new Stand(message.author.id);
 				stand.tellStand(message.channel);
-				break;
-			case "improve_name":
-				improveName(message);
 				break;
 			case "taste_of_a":
 				makeMeme(message);

@@ -11,10 +11,10 @@ import TasteOfA from "../commands/TasteOfA";
 // goal of this class is to make the commands array somewhat of a singleton
 // (as far that is possible in javascript)
 class Commands {
-	constructor(donations){
+	constructor(donationRepository){
 	    this.commands = [
 			new Introduction(),
-			new ShowProgress(donations),
+			new ShowProgress(donationRepository),
             new TasteOfA(),
             new GetStand(),
 			new ShoutOra(),

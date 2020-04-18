@@ -1,11 +1,10 @@
 import Currency from "../entities/Currency";
-import DonationRepository from "../repository/donationRepository"
 import * as fs from "fs";
 
 class Donations {
 
-	constructor() {
-		this.repository = new DonationRepository();
+	constructor(donationRepository) {
+		this.repository = donationRepository;
 	}
 
 	// check for donations
@@ -23,7 +22,7 @@ class Donations {
 
 	// Donate lires
 	receiveDonation(contributor, channel, change) {
-		let inBank = this.moneyInBank()
+		let inBank = this.repository.moneyInBank()
 		let afterTransfer = inBank;
 		if (change != 0) {
 			afterTransfer = this.updateInventory(contributor, "lires", change);
@@ -33,13 +32,9 @@ class Donations {
 		this.tellRanking(channel, "lires", contributor);
 	}
 
-	moneyInBank() {
-		return this.repository.memory["inventory"].lires;
-	}
-
 	tellRanking(channel, goods, contributor) {
-		let ranking = this.getRanking(contributor.id, goods);
-		channel.send("ranking: " + ranking.rank);
+		let ranking = this.getRanking(contributor.id);
+		channel.send("ranking: " + ranking);
 	}
 
 	thankYouMessage(user) {
@@ -90,27 +85,17 @@ class Donations {
 		});
 		return afterTransfer;
 	}
+	
+	getRanking(id) {
+		let leaderBoard = this.repository.getRankedDonors();
+		let ranking = 1;
 
-	// gets the ranking of a person for a certain goods
-	getRanking(id, goods) {
-		let leaderBoard = this.getLeaderBoard(goods);
-		for (let rank = 1; rank <= leaderBoard.length; rank++) {
-			if (leaderBoard[rank - 1].id == id)
-				return { rank: rank, goods: leaderBoard[rank - 1].goods };
+		for (; ranking <= leaderBoard.length; ranking++) {
+			if (leaderBoard[ranking - 1].id == id)
+				break;
 		}
-		return { rank: leaderBoard.length, goods: 0 };
-	}
 
-	// return leaderboard with format: id, displayName and [goods]
-	getLeaderBoard(goods) {
-		let contributors = this.repository.memory["contributors"];
-
-		let leaderBoard = Object.keys(contributors).map(function (key) {
-			return { id: key, displayName: this[key].displayName, goods: this[key][goods] ? this[key][goods] : 0 };
-		}, contributors);
-		leaderBoard.sort(function (p1, p2) { return p2.goods - p1.goods; });
-
-		return leaderBoard;
+		return ranking;
 	}
 }
 

@@ -1,11 +1,13 @@
 const token = require("./token.json").token;
 ﻿import * as discord from "discord.js";
 import Service from "./service/Service.js";
+import DonationRepository from "./repository/donationRepository"
 import Donations from "./service/Donations"
 import Commands from "./model/Commands"
 
-var donations = new Donations();
-var commands = new Commands(donations)
+var donationRepository = new DonationRepository();
+var donations = new Donations(donationRepository);
+var commands = new Commands(donationRepository);
 var client = new discord.Client();
 var service = new Service(commands, donations);
 

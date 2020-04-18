@@ -32,7 +32,7 @@ class ShowProgress extends AbstractCommand {
 	}
 
 	commandDescription() {
-		return "Shows how far I'm to becoming a gang-star/";
+		return "Shows how far I am to becoming a gang-star.";
 	}
 }
 

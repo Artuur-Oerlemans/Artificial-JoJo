@@ -7,7 +7,6 @@ var donations = new Donations();
 class Service{
 
 	constructor(commands, donations){
-		//TODO: apply IoD here.
 		this.donations = donations;
 
 		this.commands = commands;

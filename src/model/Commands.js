@@ -1,11 +1,12 @@
-import LoavesEaten from "../commands/LoavesEaten";
-import Introduction from "../commands/Introduction";
-import Help from "../commands/Help";
 import CountdownNextEpisode from "../commands/CountdownNextEpisode";
-import ShowProgress from "../commands/ShowProgress";
+import DiceRoll from "../commands/DiceRoll.js";
 import Garfield from "../commands/Garfield";
-import ShoutOra from "../commands/ShoutOra";
 import GetStand from "../commands/GetStand";
+import Help from "../commands/Help";
+import Introduction from "../commands/Introduction";
+import LoavesEaten from "../commands/LoavesEaten";
+import ShoutOra from "../commands/ShoutOra";
+import ShowProgress from "../commands/ShowProgress";
 import TasteOfA from "../commands/TasteOfA";
 
 // goal of this class is to make the commands array somewhat of a singleton
@@ -15,7 +16,8 @@ class Commands {
 	    this.commands = [
 			new Introduction(),
 			new ShowProgress(donationRepository),
-            new TasteOfA(),
+			new TasteOfA(),
+			new DiceRoll(),
             new GetStand(),
 			new ShoutOra(),
 			new LoavesEaten(),

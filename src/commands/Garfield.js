@@ -9,9 +9,10 @@ class Garfield extends AbstractCommand {
 		var year = randomDate.getFullYear();
 		// +1 as on the Garfield site, the first month and day is 1 not 0.
 		var month = this.padWithZeroes(randomDate.getMonth() + 1);
-		var day = this.padWithZeroes(randomDate.getDay() + 1)
+		var day = this.padWithZeroes(randomDate.getDay() + 1);
+		var url = "https://d1ejxu6vysztl5.cloudfront.net/comics/garfield/" + year + "/" + year + "-" + month + "-" + day + ".gif";
 
-		channel.send(year + "-" + month + "-" + day, { files: ["https://d1ejxu6vysztl5.cloudfront.net/comics/garfield/" + year + "/" + year + "-" + month + "-" + day + ".gif"] });
+		channel.send(year + "-" + month + "-" + day, { files: [url] });
 	}
 
 	randomGarfieldDate() {

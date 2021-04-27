@@ -1,6 +1,6 @@
 {
     "inventory": {
-        "lires": 460683
+        "lires": 475333
     },
     "contributors": {
         "12345": {
@@ -12,7 +12,7 @@
         },
         "163668657740709889": {
             "displayName": "Orloman",
-            "lires": 177323
+            "lires": 190037
         },
         "94177486702641152": {
             "displayName": "pimp nanako",
@@ -37,6 +37,10 @@
         "273883895588454400": {
             "displayName": "Steen",
             "lires": 11618
+        },
+        "180367161846530048": {
+            "displayName": "Knight of the Agate",
+            "lires": 1936
         }
     }
 }

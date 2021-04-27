@@ -1,3 +1,4 @@
+import Airlock from "../commands/Airlock";
 import CountdownNextEpisode from "../commands/CountdownNextEpisode";
 import DiceRoll from "../commands/DiceRoll.js";
 import Garfield from "../commands/Garfield";
@@ -15,9 +16,10 @@ class Commands {
 	constructor(donationRepository){
 	    this.commands = [
 			new Introduction(),
+			new Airlock(),
 			new ShowProgress(donationRepository),
 			new TasteOfA(),
-			new DiceRoll(),
+			// new DiceRoll(),
             new GetStand(),
 			new ShoutOra(),
 			new LoavesEaten(),

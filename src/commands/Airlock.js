@@ -1,16 +1,13 @@
 import AbstractCommand from "./AbstractCommand";
 var fs = require('fs')
-	, gm = require('gm')
-	, request = require('request');
-
-var displayName;
-var channel;
+    , gm = require('gm')
+    , got = require('got');
 
 class Airlock extends AbstractCommand {
 	commandWord() { return "airlock"; }
 
     activateCommand(message) {
-        if (message.mentions.members.array().length == 0) {
+        if (message.mentions.members.size == 0) {
             this.postNobodyEjected(message.channel);
         } else if (message.mentions.users.first().id == 518344287554109450) {
             this.postRejection(message.channel, message.author);
@@ -94,9 +91,10 @@ class ExtractFace {
     start(subject) {
         let afterAdress = './memeTemplates/profileImage';
         let followObj = this.followObj;
-        let faceURL = subject.user.displayAvatarURL;
+        let faceURL = subject.user.displayAvatarURL();
 
-        gm(request(faceURL))
+        gm(got.stream(faceURL)
+        )
             .noProfile()
             .rotate('transparent', this.rotation)
             .resize(this.faceSize, this.faceSize)

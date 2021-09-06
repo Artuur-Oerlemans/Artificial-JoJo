@@ -1,6 +1,6 @@
 var fs = require('fs')
   , gm = require('gm')
-  , request = require('request');
+  , got = require('got');
 var displayName;
 var statement;
 var channel;
@@ -8,14 +8,14 @@ var channel;
 function makeMeme(message) {
 	let subject;
 	let arg = message.content.split(" ").slice(1);
-	if(message.mentions.members.array().length != 0){
+	if(message.mentions.members.size != 0){
 		subject = message.mentions.members.first();
 		arg = arg.slice(1);
 	} else {
 		subject = message.member;
 	}
 	statement = arg.join(" ");
-	let faceURL = subject.user.displayAvatarURL;
+	let faceURL = subject.user.displayAvatarURL();
     displayName = reduceWidthByUsingMultipleLines(subject.displayName);
     channel = message.channel;
     console.log(faceURL);
@@ -36,7 +36,7 @@ function reduceWidthByUsingMultipleLines(sentence){
 function extractFaceAndMakeGrey(faceURL){
 	//gm("./standImages/38.png")
 	let faceSize = 540;
-	gm(request(faceURL))
+	gm(got.stream(faceURL))
 		.noProfile()
 		.colorspace("GRAY")
 		//.monochrome()

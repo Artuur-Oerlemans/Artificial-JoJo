@@ -7,7 +7,7 @@ class LoavesEaten extends AbstractCommand {
 		let channel = message.channel;
 		let yearsUnfiltered = message.content.split(' ')[1];
 		// adds this emoji to our memory 
-		let menacing = message.client.emojis.find(emoji => emoji.name === "menacing");
+		let menacing = message.client.emojis.cache.find(emoji => emoji.name === "menacing");
 
 		let years = parseInt(yearsUnfiltered);
 		if (isNaN(years) || years < 0) {

@@ -1,5 +1,5 @@
 const token = require("./token.json").token;
-﻿import * as discord from "discord.js";
+﻿import * as Discord from "discord.js";
 import Service from "./service/Service.js";
 import DonationRepository from "./repository/donationRepository"
 import Donations from "./service/Donations"
@@ -8,7 +8,7 @@ import Commands from "./model/Commands"
 var donationRepository = new DonationRepository();
 var donations = new Donations(donationRepository);
 var commands = new Commands(donationRepository);
-var client = new discord.Client();
+const client = new Discord.Client({ intents: ["GUILDS", "GUILD_MESSAGES"] })
 var service = new Service(commands, donations);
 
 client.login(token)
@@ -21,7 +21,7 @@ client.login(token)
 
 client.on("ready", () => {
     console.log("ready");
-    client.user.setActivity("Oh, That's A Baseball!", { type: "PLAYING" });
+    client.user.setActivity("Nomad: Artificial JoJo 2", { type: "WATCHING" });
 });
 
 //the thing that should be infront of commands
@@ -30,7 +30,7 @@ const commandPrefix = ";"
 client.on('error', console.error);
 
 // message receiver
-client.on("message", (message) => {
+client.on("messageCreate", (message) => {
 	
 	if (isFromBot(message)) return;
 
@@ -41,10 +41,9 @@ client.on("message", (message) => {
         return;
     }
 
-	if (wasMentioned(message)) {
+	if (message.mentions.has(client.user)) {
 		service.personalInteraction(message);
     }
-
 });
 
 function isFromBot(message) {
@@ -57,8 +56,4 @@ function removePrefixFromMessage(message) {
 
 function wasCommandPrefixUsed(message) {
 	return message.content[0] == commandPrefix;
-}
-
-function wasMentioned(message) {
-	return message.mentions.users.array().length == 1 && message.mentions.users.first().id == 518344287554109450;
 }

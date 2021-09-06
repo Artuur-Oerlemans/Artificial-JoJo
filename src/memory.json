@@ -1,18 +1,19 @@
 {
     "inventory": {
-        "lires": 475333
+        "lires": 480439
     },
     "contributors": {
         "12345": {
-            "displayName": "Boss"
+            "displayName": "Boss",
+            "lires": 1
         },
         "12346": {
             "displayName": "Doppio",
             "lires": 1
         },
         "163668657740709889": {
-            "displayName": "Orloman",
-            "lires": 190037
+            "lires": 195143,
+            "displayName": "Orloman"
         },
         "94177486702641152": {
             "displayName": "pimp nanako",

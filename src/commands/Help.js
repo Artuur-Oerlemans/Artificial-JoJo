@@ -1,5 +1,5 @@
 import AbstractCommand from "./AbstractCommand";
-import * as discord from "discord.js";
+import * as Discord from "discord.js";
 
 class Help extends AbstractCommand {
 
@@ -24,14 +24,13 @@ class Help extends AbstractCommand {
 
 		this.addHelpText(embed);
 
-		channel.send(embed);
+		channel.send({ embeds: [embed] });
 	}
 
 	makeFancyEmbed() {
-		let embed = new discord.RichEmbed();
-
-		embed.setColor("FF5733");
-		embed.setThumbnail("https://vignette.wikia.nocookie.net/jjba/images/a/ab/Joseph-oh-my-god.jpg/revision/latest?cb=20140807173126");
+		let embed = new Discord.MessageEmbed()
+			.setColor("FF5733")
+			.setThumbnail("https://vignette.wikia.nocookie.net/jjba/images/a/ab/Joseph-oh-my-god.jpg/revision/latest?cb=20140807173126");
 
 		return embed;
 	}

@@ -10,6 +10,7 @@ class Garfield extends AbstractCommand {
 		// +1 as on the Garfield site, the first month and day is 1 not 0.
 		var month = this.padWithZeroes(randomDate.getMonth() + 1);
 		var day = this.padWithZeroes(randomDate.getDay() + 1);
+		//BROKEN: There seems to no longer be a Garfield date based url I can use.
 		var url = "https://d1ejxu6vysztl5.cloudfront.net/comics/garfield/" + year + "/" + year + "-" + month + "-" + day + ".gif";
 
 		channel.send(year + "-" + month + "-" + day, { files: [url] });

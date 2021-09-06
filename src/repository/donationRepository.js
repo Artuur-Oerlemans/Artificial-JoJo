@@ -24,13 +24,14 @@ class DonationRepository {
 	}
 
 	// change the quantity of GOODS in the JSON file.
-	updateInventory(contributor, change) {
+	updateInventory(message, change) {
+		let contributor = message.author;
 		// update the inventory value
 		let inBank = this.memory["inventory"][GOODS];
 		let afterTransfer = inBank + change;
 		this.memory["inventory"][GOODS] = afterTransfer;
 		// register the contribution
-		let displayName = contributor.lastMessage.member.displayName;
+		let displayName = message.member.displayName;
 		console.log(displayName);
 		// check if the user is already in the database or update display name
 		if (!this.memory["contributors"][contributor.id]) {

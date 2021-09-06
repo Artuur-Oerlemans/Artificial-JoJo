@@ -12,21 +12,21 @@ class Donations {
 		if (currency == null) return;
 
 		if (currency.valueInLires > 0)
-			message.channel.send(this.thankYouMessage(message.author));
+			message.channel.send(this.thankYouMessage(message.member.displayName));
 		message.channel.send(currency.description);
-		this.receiveDonation(message.author, message.channel, currency.valueInLires);
+		this.receiveDonation(message, currency.valueInLires);
 	}
 
 	// Donate lires
-	receiveDonation(contributor, channel, change) {
+	receiveDonation(message, change) {
 		let inBank = this.repository.moneyInBank()
 		let afterTransfer = inBank;
 		if (change != 0) {
-			afterTransfer = this.repository.updateInventory(contributor, change);
+			afterTransfer = this.repository.updateInventory(message, change);
 		}
 
-		channel.send(inBank + " lire => " + afterTransfer + " lire");
-		this.tellRanking(channel, contributor);
+		message.channel.send(inBank + " lire => " + afterTransfer + " lire");
+		this.tellRanking(message.channel, message.author);
 	}
 
 	tellRanking(channel, contributor) {
@@ -34,8 +34,7 @@ class Donations {
 		channel.send("ranking: " + ranking);
 	}
 
-	thankYouMessage(user) {
-		let displayName = user.lastMessage.member.displayName;
+	thankYouMessage(displayName) {
 
 		let responses = ["GURETO DESU-YO!"
 			, "Naissu"
@@ -48,6 +47,8 @@ class Donations {
 			, "*yEy!* Fine, Thank You!"
 			, "Arigatou gozaimasu"
 			, "GOURUDO EKUSUPERIENSU"
+			, "yare yare daze"
+			, "yare yare dawa"
 			, "At this rate we will be at 10,000,000,000 lire in no time"];
 		let random = Math.floor(Math.random() * responses.length);
 

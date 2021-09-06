@@ -1,7 +1,7 @@
 import Airlock from "../commands/Airlock";
 import CountdownNextEpisode from "../commands/CountdownNextEpisode";
-import DiceRoll from "../commands/DiceRoll.js";
-import Garfield from "../commands/Garfield";
+// import DiceRoll from "../commands/DiceRoll.js";
+// import Garfield from "../commands/Garfield";
 import GetStand from "../commands/GetStand";
 import Help from "../commands/Help";
 import Introduction from "../commands/Introduction";
@@ -24,7 +24,7 @@ class Commands {
 			new ShoutOra(),
 			new LoavesEaten(),
 			new CountdownNextEpisode(),
-			new Garfield(),
+			// new Garfield(),
 			new Help(this)
 		];
 	}
